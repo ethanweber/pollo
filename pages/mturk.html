@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MTurk</title>
+
+    <!--    mturk stylesheet, but then override with custom things -->
+    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+
+<body>
+
+    <div class="panel panel-primary" id="Instructions" style="display:none;">
+        <div class="panel-heading"><strong>
+                <h2>Instructions</h2>
+            </strong></div>
+        <div class="panel panel-primary">
+            <!-- <div class="panel-body"> -->
+                <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
+                </p>
+                <div id="IntructionsContent"></div>
+                <p align="center">
+                    <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px" type="button" value="Proceed" disabled="disabled" />
+                </p>
+            <!-- </div> -->
+        </div>
+    </div>
+
+    <div class="panel panel-primary" id="AnnotationTestStart" style="display:none;">
+        <div class="panel-heading"><strong>
+                <h2>Main Task</h2>
+            </strong></div>
+
+        <div class="panel-body">
+            <div id="AnnotationTestStartContent"></div>
+
+            <p align="center">
+                <input id="GoToAnnotationTestButton" onclick="goToPage('AnnotationTest')"
+                    style="height:50px;width:100px" type="button" value="Start!" />
+            </p>
+        </div>
+    </div>
+    <div class="panel panel-primary" id="AnnotationTest" style="display:none;">
+        <div class="panel-heading" id="AnnotationTestHeader"><strong>
+                <h2>For the person in the GREEN BOX, which 3D visualization corresponds to where they are in the room?</h2>
+            </strong></div>
+        <div id=AnnotationTestMessage"></div>
+        <div id="AnnotationTestQuestionsDiv"></div>
+        <h2 align="center" id="AnnotationTestImageCount">0/50 change this</h2>
+    </div>
+
+    <div class="panel panel-primary" id="Finish" style="display:none;">
+        <div class="panel-heading"><strong>
+                <h2 id="FinishHeading"></h2>
+            </strong></div>
+        <div class="panel-body">
+            <div id="FinishText"></div>
+            <p>Thank you.</p>
+        </div>
+        <!--<form id='submitid' action='aux_url' method='post' style="display:none;">-->
+        <form id='submitid' action='aux_url' method='post'>
+            <p align="center">
+                <input type="button" id="submitButton" value="Submit" autocomplete="off" disabled="disabled"
+                    onClick="attemptSubmit()" style="height:40px;width:400px" value="Submit" />
+            </p>
+            <!-- <input type="hidden" name="global_config" id="global_config" value="" autocomplete="off" /> -->
+            <input type="hidden" name="answer" id="answer" value="" autocomplete="off" />
+            <input type="hidden" name="assignmentId" id="assignment" value="" autocomplete="off" />
+        </form>
+    </div>
+
+</body>
+
+<script>
+    // set config to dynamically load the page, based on the mturk task
+    var GLOBAL_CONFIG_TYPE = "${CONFIG_TYPE}";
+    var GLOBAL_CONFIG_NAME = "${CONFIG_NAME}";
+</script>
+
+<script type="text/javascript" src="/static/utils.js"></script>
+<script type="text/javascript" src="/static/mturk.js"></script>
+<script type="text/javascript" src="/static/pickn.js"></script>
+
+<!--keep content for the page down here-->
+<div id="picknInstructionsContent" style="display: none;">
+    <p>
+        In this job, you are asked to select which of the two people is in a more realistic position.
+    </p>
+    <p>
+        Each question consists of two rows.
+        The <b>top row</b> shows two images from a popular TV show, where the person of interest is marked with a colored box.
+        The <b>bottom row</b> shows two videos of your possible answers: 0 or 1.
+    </p>
+    <p><b>Your task is to choose the video where the person is in a better location.</b></p>
+    <p>Press play on the videos to inform your response, and then choose your selection by clicking on the number below.</p>
+    <p><b><i>
+        The estimated time for this HIT is less than 10 minutes. Please be consistent in your responses, or otherwise the HIT will not be accepted. Thank you.
+    </i></b></p>
+    <h3>Examples</h3>
+    <p>Click to play the videos.</p>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples">
+    </div>
+</div>
+
+<div id="ExampleTemplate" style="display: none;">
+    <div class="ExampleTemplateClass1"></div>
+    <div align="center" class="ExampleTemplateContent1"></div>
+    <div class="ExampleTemplateText1"></div>
+</div>
+
+<div id="PicknQuestionTemplate" style="display: none;">
+    <div align="center" class="PicknQuestionImage"></div>
+    <div class="PicknConfirmMoveOn">
+        <p align="center">
+            <input class="proceedToNextQuestionClass" onclick="picknProceedToNextQuestion()" style="height:50px;width:75%"
+                type="button" disabled="disabled" value="Proceed to next question" />
+        </p>
+    </div>
+</div>
+
+
+<div class="panel panel-primary" id="picknRealTaskTemplate" style="display:none;">
+    <p>You will be asked to answer to <span id="picknRealTaskTemplateClassNumImages"></span> examples
+        sequentially.</p>
+
+    <p>You are expected to take up to <strong>30</strong> seconds per example.</p>
+
+    <p>Please <strong>do not</strong> take any breaks in the middle of the task.</p>
+
+    <p><b><i>
+        However, do not worry and do not rush.
+        It is more important to do the task right and have high quality responses.
+        For this reason, we will monitor your time and consistency during the task.
+        Failing to have consistency will not let you submit this HIT, and as a result you will not be paid.
+        We thank you for your help.
+    </i></b></p>
+</div>
+
+</html>

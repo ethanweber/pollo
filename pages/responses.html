@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Responses</title>
+
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+</head>
+<body>
+
+<div class="Responses">
+    <div id="testtime"></div>
+    <br>
+    <div id="pickn_results">
+    </div>
+</div>
+
+
+<script>
+    // set config to dynamically load the page, based on the mturk task
+    var GLOBAL_CONFIG_TYPE = "${CONFIG_TYPE}";
+    var GLOBAL_CONFIG_NAME = "${CONFIG_NAME}";
+</script>
+
+</body>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script type="text/javascript" src="/static/utils.js"></script>
+<script type="text/javascript" src="/static/responses.js"></script>
+
+<!-- <div id="picknNoneButtonTemplate" style="display:none;">
+    <input onclick="picknSelectNone()" style="display:inline-block; height:75px; width:200px"
+           type="button"
+           value="Select None"/>
+</div> -->
+
+<div id="ExampleTemplate" style="display: none;">
+    <div class="ExampleTemplateClass1"></div>
+    <div align="center" class="ExampleTemplateContent1"></div>
+    <div class="ExampleTemplateText1"></div>
+</div>
+
+
+
+</html>
