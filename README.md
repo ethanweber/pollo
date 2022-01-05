@@ -1,6 +1,12 @@
 # Amazon MTurk User Study
 
 
+### Use cases (implemented)
+
+- [x] Qualitative user studies
+- [ ] Binary classification
+- [ ] 
+
 ### Folder structure
 
 ```
