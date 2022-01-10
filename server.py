@@ -14,11 +14,20 @@ import os
 import goat
 import json
 
-STATIC_FOLDER = "/shared/ethanweber/friends/mturk/static"
+
+def current_path():
+    return os.path.dirname(os.path.abspath(__file__))
+
 CONFIG_TYPE = "pickn"
-HIT_FOLDER = "/shared/ethanweber/friends/mturk/static/data/hits"
-LOCAL_RESPONSE_FOLDER = "/shared/ethanweber/friends/mturk/static/data/local_responses"
-RESPONSE_FOLDER = "/shared/ethanweber/friends/mturk/static/data/responses"
+STATIC_FOLDER = goat.pjoin(current_path(), "static")
+HIT_FOLDER = goat.pjoin(STATIC_FOLDER, "data/hits")
+LOCAL_RESPONSE_FOLDER = goat.pjoin(STATIC_FOLDER, "data/local_responses")
+RESPONSE_FOLDER = goat.pjoin(STATIC_FOLDER, "data/responses")
+# make these folders if they do not exist
+goat.make_dir(STATIC_FOLDER)
+goat.make_dir(HIT_FOLDER)
+goat.make_dir(LOCAL_RESPONSE_FOLDER)
+goat.make_dir(RESPONSE_FOLDER)
 
 app = Flask(__name__, static_url_path="/static", static_folder=STATIC_FOLDER)
 app.jinja_env.filters['zip'] = zip
@@ -60,6 +69,9 @@ def get_local_responses(config_name):
     config_data = goat.load_from_json(os.path.join(LOCAL_RESPONSE_FOLDER, config_name + ".json"))
     return jsonify(config_data)
 
+#########
+# FOR THE QUALITATIVE USER STUDY TASKS
+
 # The MTurk task. <config_name> is used to specify the .json file config, specifying the task.
 @app.route('/mturk/<config_name>', methods=["GET"])
 def mturk(config_name):
@@ -68,8 +80,6 @@ def mturk(config_name):
     modified_html = html_as_str.replace("${CONFIG_TYPE}", CONFIG_TYPE)
     modified_html = modified_html.replace("${CONFIG_NAME}", config_name)
     return modified_html
-
-
 # Look at the responses from MTurk to see how people responded.
 @app.route('/responses/<config_name>', methods=["GET"])
 def responses(config_name):
@@ -78,6 +88,18 @@ def responses(config_name):
     modified_html = html_as_str.replace("${CONFIG_TYPE}", CONFIG_TYPE)
     modified_html = modified_html.replace("${CONFIG_NAME}", config_name)
     return modified_html
+#########
+
+#########
+# FOR THE IMAGE CLASSIFICATION TASKS
+@app.route('/img_classify/<config_name>', methods=["GET"])
+def img_classify(config_name):
+    with open("pages/img_classify.html", 'r') as file:
+        html_as_str = file.read()
+    # html_as_str = html_as_str.replace("${CONFIG_TYPE}", CONFIG_TYPE)
+    html_as_str = html_as_str.replace("${CONFIG_NAME}", config_name)
+    return html_as_str
+#########
 
 
 if __name__ == '__main__':

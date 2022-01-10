@@ -45,6 +45,24 @@ cd goat
 python setup.py
 ```
 
+### Setup data
+
+First, you need to add data to the `static/data/` folder, as specified above.
+
+For media, this might be a symbolic link.
+```
+cd static/data/media
+ln -l /path/to/images images
+```
+
+When referencing an asset in the static folder, e.g., an image, you can use the `path` that starts after "static".
+E.g., "data/media/images/<>"
+
+
+Note:
+pages/img_classify.html and static/img_classify/ aren't very well integrated into the MTURK pipeline yet.
+
+
 ### Server configuration
 
 ```

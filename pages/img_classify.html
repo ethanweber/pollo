@@ -1,0 +1,276 @@
+<html>
+
+<head>
+    <link rel="shortcut icon" href="/static/favicon.png">
+</head>
+
+<body>
+
+    <script>
+        // set config to dynamically load the page, based on the mturk task
+        var GLOBAL_CONFIG_NAME = "${CONFIG_NAME}";
+        var GLOBAL_CONFIG = null; // to be populated
+    </script>
+
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>
+    <script src="/static/img_classify/js/get_data.js" type="text/javascript"></script>
+
+
+
+
+    <style>
+        div {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+        }
+
+        .target {
+            color: #0D0;
+        }
+
+        .target img {
+            border: 3px solid #0D0;
+        }
+
+        .noise {
+            color: #F00;
+        }
+
+        .noise img {
+            border: 3px solid #F00;
+        }
+
+        .target p:first-child {
+            display: none;
+        }
+
+        .target p:nth-child(2) {
+            display: inline;
+        }
+
+        .noise p:first-child {
+            display: inline;
+        }
+
+        .noise p:nth-child(2) {
+            display: none;
+        }
+
+        .none p:first-child {
+            display: none;
+        }
+
+        .none p:nth-child(2) {
+            display: none;
+        }
+
+        .example {
+            display: inline-block;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .example img {
+            border-width: 6px;
+            max-width: 120px;
+            height: 75px;
+        }
+
+        .example p {
+            font-weight: normal;
+            font-size: 12pt;
+        }
+
+        .focus {
+            display: table-cell;
+            vertical-align: middle;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            width: 400px;
+            height: 450px;
+            font-size: xx-large;
+        }
+
+        .focus span {
+            padding: 10px;
+            border-style: solid;
+        }
+
+        .focus1 {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 6px;
+            width: 150px;
+            height: 100px;
+            font-size: normal;
+        }
+
+        .focus2 {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 4px;
+            width: 50px;
+            height: 50px;
+            font-size: smaller;
+        }
+
+        .focus3 {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 2px;
+            width: 25px;
+            height: 25px;
+            font-size: x-small;
+        }
+
+        .focus img {
+            max-width: 376px;
+            max-height: 376px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0px;
+            border-width: 12px;
+        }
+
+        .focus1 img {
+            max-width: 88px;
+            max-height: 88px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0px;
+            border-width: 6px;
+        }
+
+        .focus2 img {
+            max-width: 42px;
+            max-height: 42px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0px;
+            border-width: 4px;
+        }
+
+        .focus3 img {
+            max-width: 21px;
+            max-height: 21px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0px;
+            border-width: 2px;
+        }
+
+        .focus p {
+            font-weight: bolder;
+            font-size: 28pt;
+        }
+
+        .focus1 p {
+            display: none;
+            font-weight: normal;
+            font-size: 16pt;
+        }
+
+        .focus2 p {
+            display: none;
+            font-weight: normal;
+            font-size: 9pt;
+        }
+
+        .focus3 p {
+            display: none;
+            font-weight: normal;
+            font-size: 6pt;
+        }
+    </style>
+
+    <div id="instructionDiv"
+        style="width: 822px; text-align: center; margin-left: auto; margin-right: auto; font-size:20px; font-weight:bold;">
+        Does the following incident (<span id="question" style="color: #00F;"></span>) appear on these images?&nbsp;
+        <button onclick="start(); " id="startButton" type="button" style="display: none;">Start</button>&nbsp;
+
+        <form id='submitid' action='aux_url' method='post'>
+            <input type="submit" id="submitButton" value="Submit" disabled="disabled" autocomplete="off"
+                onClick="return 	confirmSubmit()" style="display: none; position: relative; top:10px;" />
+            <input type="hidden" name="answer" id="answer" value="" autocomplete="off" />
+            <input type="hidden" name="event" id="event" value="" autocomplete="off" />
+            <input type="hidden" name="assignmentId" id="assignment" value="" autocomplete="off" />
+            <input type="hidden" name="imset" id="imset" value="" autocomplete="off" />
+            <input type="hidden" name="owner" id="owner" value="" autocomplete="off" />
+        </form>
+    </div>
+
+    <div id="definitionDiv"
+        style="width: 822px; margin-left: auto; margin-right: auto; z-index: 10; text-align: center; ">
+        <p>
+    </div>
+
+    <div id="loadingDiv"
+        style="width: 822px; height: 440px; text-align: center;  margin-left: auto; margin-right: auto; display: none; ">
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /> Images are loading ...<br /><br />
+        <img src="https://vision.cs.princeton.edu/web/splashScreenImage.gif" />
+    </div>
+
+
+    <div id="contentDiv"
+        style="width: 822px; height: 440px; text-align: center;  margin-left: auto; margin-right: auto; font-size: 13pt; display: none; ">
+    </div>
+
+    <div id="progressDiv" style="text-align: center; display: none; padding-top: 45px;">
+        <button type="button" onclick="leftButtonFun();" id="leftButton">
+            <image src="/static/img_classify/assets/left.png" />
+        </button> &nbsp;
+        <span id="progressCNT" style="font-size:14px; font-weight: normal;">N/N</span> &nbsp;
+        <button type="button" onclick="rightButtonFun();" id="rightButton">
+            <image src="/static/img_classify/assets/right.png" />
+        </button>
+    </div>
+
+    <div id="instrDiv" style="width: 822px; margin-left: auto; margin-right: auto; z-index: 10; ">
+        <h3 style="margin-top: 0; margin-bottom: 0;">Task</h3>
+        <ul>
+            <p>For each of the <span id="imageCount" style="font-weight: bold; color: #00F;">133</span> images, answer
+                YES or NO to the above question. Only answer <b style="font-weight: bold; color: #0B0;">YES</b> to <b
+                    style="font-weight: bold; color: #00F;">real photos</b>.
+                Only answer <b style="font-weight: bold; color: #0B0;">YES</b> to photos taken from ground level. Always
+                answer <b style="font-weight: bold; color: #F00;">NO</b> to <b
+                    style="font-weight: bold; color: #F00;">cartoon</b>, <b
+                    style="font-weight: bold; color: #F00;">drawing</b>,
+                <b style="font-weight: bold; color: #F00;">bad photos</b>,
+                or <b style="font-weight: bold; color: #F00;">text overlay photos</b>. Here are some examples:
+            </p>
+        </ul>
+
+        <div id="exampleDiv" style="text-align: center; margin-top: 0;"></div>
+
+
+        <h3 style="margin-top: 0; margin-bottom: 0;">Usage</h3>
+        <img src="/static/img_classify/assets/keyboard_small.jpg" style="float : right; width: 45%; margin : 0 0 0px 10px;" />
+        <ul>
+            <li>Press the right arrow [->] key or ([d] key) to go to the next image.</li>
+            <li>Use the [space] key to toggle the answer between YES or NO. The default answer is NO.</li>
+            <li>Press the left arrow [
+                <-] key or ([a] key) to go back to the previous image.</li>
+        </ul>
+        <h3 style="margin-top: 0; margin-bottom: 0;">Submit</h3>
+        <ul>
+            <li>After you answer all the images, the [submit] button will be enabled.</li>
+            <li><b style="color: #00F;">If your accuracy is too low, it won't allow you to submit. You will
+                    have to improve your answers first.</b></li>
+        </ul>
+
+        <p style="font-size: 8pt; color: #999;">By making judgments about these images, you are
+            participating in a study being performed by MIT. If you have questions about this research,
+            please contact ejweber at mit.edu. Your participation in this research is voluntary. You may
+            decline further
+            participation, at any time, without adverse consequences. Your anonymity is assured; the
+            researchers who have requested your participation will not receive any personal information
+            about you.</p>
+    </div>

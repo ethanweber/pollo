@@ -201,7 +201,12 @@ class Requester(object):
                 assert len(assignments_list["Assignments"]) >= 1
             if self.database[self.get_sandox_key()][external_url]["response"] is None:
                 answer_dict = xmltodict.parse(assignments_list["Assignments"][0]['Answer'])
-                answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
+                # print(answer_dict)
+                # print(len(answer_dict))
+                try:
+                    answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
+                except:
+                    answer = answer_dict['QuestionFormAnswers']['Answer'][0]["FreeText"]
                 self.database[self.get_sandox_key()][external_url]["response"] = json.loads(answer)
         # write database
         self.write_database()
@@ -215,7 +220,7 @@ class Requester(object):
     def save_mturk_parsed_results_to_file(self, response_dict):
         """Save the HIT to file.
         """
-        filename = os.path.join(self.database_filename.replace("mturk_database.pkl", "static/data/responses"),
+        filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
                                 response_dict["GLOBAL_CONFIG_NAME"] + ".json")
         goat.make_dir(filename)
         goat.write_to_json(filename, response_dict)
