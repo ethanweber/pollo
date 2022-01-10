@@ -1,4 +1,6 @@
-# Amazon MTurk User Study
+# anno: Code for Amazon MTurk Annotation Tasks
+
+> This repo is a compilation of code for AMT that I use or have used for annotation tasks for computer vision purposes (e.g., binary verification, image classification, qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
 
 
 ### Use cases (implemented)
