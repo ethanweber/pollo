@@ -55,13 +55,13 @@ function turkGetParam(name) {
 
 
 // entrypoint for the site, which is the instructions.
-$(document).ready(function () {
+$(document).ready(function() {
 
     // mturk parameters
     // https://github.com/jspsych/jsPsych/issues/10
     // https://gist.github.com/longouyang/845528/0cfe4a527d551b948392976f0539723b257b7c67
 
-    var param = function (url, name) {
+    var param = function(url, name) {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regexS = "[\\?&]" + name + "=([^&#]*)";
         var regex = new RegExp(regexS);
@@ -146,7 +146,7 @@ function attemptSubmit() {
 }
 
 var down = false;
-document.onkeydown = function (e) {
+document.onkeydown = function(e) {
     if (down) return;
     down = true;
     let keycode = e.keyCode;
@@ -160,7 +160,7 @@ document.onkeydown = function (e) {
     }
 
     // console.log(keycode);
-    switch (GLOBAL_CONFIG["TYPE"]) {
+    switch (GLOBAL_CONFIG["settings"]["type"]) {
         case "binary":
             binaryKeyControls(keycode);
             break;
@@ -176,7 +176,7 @@ document.onkeydown = function (e) {
 };
 
 // don't allow user to hold down key
-document.addEventListener('keyup', function () {
+document.addEventListener('keyup', function() {
     down = false;
 }, false);
 

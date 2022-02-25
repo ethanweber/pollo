@@ -7,12 +7,16 @@ This will enable access to a few important endpoints:
 The last two are particularly important.
 """
 
+import argparse
 from flask import (Flask,
                    jsonify,
                    request)
 import os
-import goat
 import json
+import goat
+
+parser = argparse.ArgumentParser(description="")
+parser.add_argument("--port", type=int, default=8891, help='an integer for the accumulator')
 
 
 def current_path():
@@ -31,6 +35,11 @@ goat.make_dir(RESPONSE_FOLDER)
 
 app = Flask(__name__, static_url_path="/static", static_folder=STATIC_FOLDER)
 app.jinja_env.filters['zip'] = zip
+
+# Get the config paramters for HIT.
+@app.route('/', methods=["GET"])
+def root():
+    return "The server is working, but this endpoint isn't useful."
 
 # Get submitted mturk data locally.
 @app.route('/mturk/externalSubmit', methods=["POST"])
@@ -73,13 +82,14 @@ def get_local_responses(config_name):
 # FOR THE QUALITATIVE USER STUDY TASKS
 
 # The MTurk task. <config_name> is used to specify the .json file config, specifying the task.
-@app.route('/mturk/<config_name>', methods=["GET"])
-def mturk(config_name):
-    with open("pages/mturk.html", 'r') as file:
+@app.route('/interface/<config_name>', methods=["GET"])
+def interface(config_name):
+    with open("pages/interface.html", 'r') as file:
         html_as_str = file.read()
     modified_html = html_as_str.replace("${CONFIG_TYPE}", CONFIG_TYPE)
     modified_html = modified_html.replace("${CONFIG_NAME}", config_name)
     return modified_html
+    
 # Look at the responses from MTurk to see how people responded.
 @app.route('/responses/<config_name>', methods=["GET"])
 def responses(config_name):
@@ -104,4 +114,5 @@ def img_classify(config_name):
 
 if __name__ == '__main__':
     print("running server")
-    app.run(debug=False, threaded=True, host="0.0.0.0", port=8891)
+    args = parser.parse_args()
+    app.run(debug=False, threaded=True, host="0.0.0.0", port=args.port)

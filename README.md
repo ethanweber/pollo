@@ -1,7 +1,8 @@
-# anno: Code for Amazon MTurk Annotation Tasks
+# ANNO: A codebase for computer vision Amazon MTurk Annotation (AMT) tasks
 
 > This repo is a compilation of code for AMT that I use or have used for annotation tasks for computer vision purposes (e.g., binary verification, image classification, qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
 
+The main idea for this repo is to specify a JSON file descripting each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task.
 
 ### Use cases (implemented)
 
@@ -13,7 +14,7 @@
 
 ```
 |-pages/
-    |-mturk.html
+    |-hits.html
     |-responses.html
 |-static/
     |-data/
@@ -21,12 +22,12 @@
             |-<hit_name>.json
         |-responses/
             |-<hit_name>.json
-        |-media/
-            |-
+        |-media/ # here you can store images or videos
+|-hit_makers/
+    |-hit_maker.py
+    |-biasgan_hit_maker.py
 
-|-hit_maker.py
-|-requester.ipynb
-    # main file for creating hits, sending hits, and saving hits
+|-requester.ipynb # main file for creating hits, sending hits, and saving hits
 
 |-requester.py
 |-server.py

@@ -1,5 +1,6 @@
 .ipynb_checkpoints/
 __pycache__/
+old
 static/data
 mturk_creds.json
 mturk_database.pkl
