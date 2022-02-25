@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>MTurk</title>
+    <title>Interface</title>
 
     <!--    mturk stylesheet, but then override with custom things -->
     <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
@@ -25,14 +25,12 @@
                 <h2>Instructions</h2>
             </strong></div>
         <div class="panel panel-primary">
-            <!-- <div class="panel-body"> -->
-                <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
-                </p>
-                <div id="IntructionsContent"></div>
-                <p align="center">
-                    <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px" type="button" value="Proceed" disabled="disabled" />
-                </p>
-            <!-- </div> -->
+            <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
+            </p>
+            <div id="IntructionsContent"></div>
+            <p align="center">
+                <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px" type="button" value="Proceed" disabled="disabled" />
+            </p>
         </div>
     </div>
 
