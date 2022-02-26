@@ -7,7 +7,7 @@ class BiasganHitMaker(HitMaker):
 
     def __init__(self):
         super().__init__()
-        self.buttons = None
+        self.choices = None
         self.quality_control_type = "ground_truth"
         self.quality_control_min_percent_correct = 0.8
 
@@ -16,8 +16,7 @@ class BiasganHitMaker(HitMaker):
                 gt_query_examples,
                 query_examples):
         hit = super().get_hit()
-        hit["settings"]["type"] = "buttons"
-        hit["settings"]["buttons"] = self.buttons
+        hit["settings"]["type"] = "choices"
         hit["settings"]["quality_control"] = {}
         hit["settings"]["quality_control"]["type"] = self.quality_control_type
         hit["settings"]["quality_control"]["min_percent_correct"] = self.quality_control_min_percent_correct
@@ -34,13 +33,14 @@ class BiasganHitMakerRace(BiasganHitMaker):
 
     def __init__(self):
         super().__init__()
-        self.buttons = ["Black", "White", "None"]
 
-    def get_example(self, urls, answers=None, descriptions=None):
+    def get_example(self, urls, choices=None, answer=None, descriptions=None):
         example = {}
         example["urls"] = urls
-        if answers:
-            example["answers"] = answers
+        if choices:
+            example["choices"] = choices
+        if answer:
+            example["answer"] = answer
         if descriptions:
             example["descriptions"] = descriptions
         return example
@@ -51,7 +51,7 @@ class BiasganHitMakerQuality(BiasganHitMaker):
 
     def __init__(self):
         super().__init__()
-        self.buttons = ["Low quality", "High quality"]
+        self.choices = ["Low quality", "High quality"]
 
 
 class BiasganHitMakerBetter(BiasganHitMaker):
@@ -62,7 +62,7 @@ class BiasganHitMakerBetter(BiasganHitMaker):
 
     def __init__(self):
         super().__init__()
-        self.buttons = ["0", "1"]
+        self.choices = ["0", "1"]
 
 
 task_to_class = {

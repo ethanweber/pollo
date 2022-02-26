@@ -219,7 +219,7 @@ function picknGetFeedbackContent(idx) {
 async function getExamplesDivsFromConfig(example) {
     let examples = [];
     for (let i = 0; i < example.length; i++) {
-        examples.push(getPicknAnnotationAsDiv(example[i]));
+        examples.push(getBiasganAnnotationAsDiv(example[i]));
     }
     return await Promise.all(examples);
 }

@@ -2,12 +2,12 @@
 
 // Get the config for a HIT.
 async function getConfigFromConfigTypeAndConfigName(config_type, config_name) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         console.log(config_name);
-        let endpoint = "/hits"
-            + "/" + config_name;
+        let endpoint = "/hits" +
+            "/" + config_name;
         $.get(endpoint,
-            function (data, textStatus, jqXHR) {
+            function(data, textStatus, jqXHR) {
                 resolve(data);
             });
     });
@@ -15,12 +15,12 @@ async function getConfigFromConfigTypeAndConfigName(config_type, config_name) {
 
 // Get the config for a HIT.
 async function getResultsFromConfigTypeAndConfigName(config_type, config_name) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         console.log(config_name);
-        let endpoint = "/get_responses"
-            + "/" + config_name;
+        let endpoint = "/get_responses" +
+            "/" + config_name;
         $.get(endpoint,
-            function (data, textStatus, jqXHR) {
+            function(data, textStatus, jqXHR) {
                 resolve(data);
             });
     });
@@ -134,10 +134,41 @@ function getPicknAnnotationAsDiv(example) {
     return annotationHTML
 }
 
+// Get the pickn annotation as a div.
+function getBiasganAnnotationAsDiv(example) {
+    let annotationHTML = document.createElement('div');
+    annotationHTML.setAttribute("class", "PickNRow");
+    let urls = example.urls;
+    let shotchangeRow = document.createElement('div');
+    shotchangeRow.setAttribute("class", "PickNRow");
+    for (let i = 0; i < urls.length; i++) {
+        let image_url = urls[i];
+        let imagehtml = getImageWithBox(image_url, null);
+        shotchangeRow.appendChild(imagehtml);
+    }
+    annotationHTML.appendChild(shotchangeRow);
+    let possibleChoicesRow = document.createElement('div');
+    possibleChoicesRow.setAttribute("class", "PickNRow");
+    let choices = example.choices;
+    for (let j = 0; j < choices.length; j++) {
+        let rowItem = document.createElement('div');
+        rowItem.setAttribute("class", "PickNRowItem");
+        let choice = choices[j];
+        rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
+        let width_perc = Math.floor((1.0 / choices.length) * 100.0);
+        rowItem.setAttribute("width", width_perc.toString() + "%");
+        possibleChoicesRow.appendChild(rowItem);
+    }
+    annotationHTML.appendChild(possibleChoicesRow);
+    return annotationHTML
+}
+
 // Get a random subarray of a list.
 // https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
 function getRandomSubarray(arr, size) {
-    let shuffled = arr.slice(0), i = arr.length, temp, index;
+    let shuffled = arr.slice(0),
+        i = arr.length,
+        temp, index;
     while (i--) {
         index = Math.floor((i + 1) * Math.random());
         temp = shuffled[index];

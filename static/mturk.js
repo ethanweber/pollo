@@ -104,7 +104,7 @@ function initializeArrays() {
     // flip the GT_HIDDEN_EXAMPLES as well and add to the query list
     let GT_HIDDEN_EXAMPLES_COPY = JSON.parse(JSON.stringify(GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"]));
     for (let i = 0; i < GT_HIDDEN_EXAMPLES_COPY.length; i++) {
-        GT_HIDDEN_EXAMPLES_COPY[i].choices.reverse()
+        GT_HIDDEN_EXAMPLES_COPY[i].urls.reverse()
     }
     GLOBAL_ALL_EXAMPLES = GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].concat(GT_HIDDEN_EXAMPLES_COPY).concat(GLOBAL_CONFIG["QUERY_EXAMPLES"]);
     GLOBAL_ALL_IDS = Array(GLOBAL_ALL_EXAMPLES.length).fill(null);

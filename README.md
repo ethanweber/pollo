@@ -77,6 +77,7 @@ python server.py
 # add HTTPS to your server for access to answer
 # TODO(ethan): document how to do this
 https://docs.google.com/document/d/1kGumBejzK7UO2rvDBnPU9UvTUAftie0X-mydV-9BCtI/edit
+vim /etc/nginx/sites-available/reverse-proxy.conf
 
 
 # go to the url
