@@ -37,13 +37,19 @@ function picknIsGtCorrectWithAnswer(ious, index) {
 // Set all content for the pickn task.
 async function picknSetContent() {
 
+    // set some stuff from settings
+    document.getElementById("expected_seconds_per_query_example").innerHTML = GLOBAL_CONFIG.settings.expected_seconds_per_query_example.toString();
+    document.getElementById("task_question").innerHTML = GLOBAL_CONFIG.settings.task_question.toString();
+
     // hack to wait for loading before timer starts
     document.getElementById("AnnotationTestStartContent").classList.add("loader");
     document.getElementById("AnnotationTestQuestionsDiv").classList.add("loader");
     document.getElementById("GoToAnnotationTestButton").disabled = true;
 
     // INSTRUCTIONS
-    document.getElementById("IntructionsContent").innerHTML = document.getElementById("picknInstructionsContent").innerHTML;
+    // document.getElementById("IntructionsContent").innerHTML = document.getElementById("picknInstructionsContent").innerHTML;
+    document.getElementById("IntructionsContent").innerHTML = document.getElementById(GLOBAL_CONFIG.settings.task).innerHTML;
+
 
     // EXAMPLES ON MAIN PAGE
     document.getElementById("PicknExamples").classList.add("loader");
@@ -198,7 +204,7 @@ function picknGetFeedbackContent(idx) {
     }
 
     let qual_result_template = document.getElementById("QualificationResultTemplate");
-    qual_result_template.getElementsByClassName("QualificationResultTemplate1")[0].innerHTML = "TODO";//GLOBAL_CLASS_IDX_TO_CLASS_NAME[GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["class_idx"]];
+    qual_result_template.getElementsByClassName("QualificationResultTemplate1")[0].innerHTML = "TODO"; //GLOBAL_CLASS_IDX_TO_CLASS_NAME[GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["class_idx"]];
 
     // show the image as well
     qual_result_template.getElementsByClassName("QualificationResultTemplate2")[0].innerHTML =
@@ -346,12 +352,11 @@ function picknLeftClickControls(e) {
             if (enable_proceed) {
                 document.getElementById("proceedButton").disabled = false;
             }
-        }
-        else if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {
+        } else if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {
             picknClearAllHighlights();
             e.target.style.border = "10px solid green";
             clickedIndex = parseInt(e.target.innerHTML);
-            setTimeout(function () {
+            setTimeout(function() {
                 // set the index as an answer
                 if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {
                     GLOBAL_ALL_RESPONSES[GLOBAL_ALL_CURRENT_IDX] = clickedIndex;

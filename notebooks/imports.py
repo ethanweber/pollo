@@ -9,6 +9,7 @@ import goat
 import mediapy as media
 import pprint
 import pandas as pd
+from tqdm import tqdm
 
 if __name__ == '__main__':
     exit(0)

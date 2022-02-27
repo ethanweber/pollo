@@ -154,7 +154,7 @@ function getBiasganAnnotationAsDiv(example) {
         let rowItem = document.createElement('div');
         rowItem.setAttribute("class", "PickNRowItem");
         let choice = choices[j];
-        rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
+        rowItem.innerHTML += "<button type=\"button\">" + choice + "</button>"
         let width_perc = Math.floor((1.0 / choices.length) * 100.0);
         rowItem.setAttribute("width", width_perc.toString() + "%");
         possibleChoicesRow.appendChild(rowItem);

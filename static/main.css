@@ -113,12 +113,14 @@ polygon {
 
 /*Stay on left.*/
 
+
 /* .left {
     float: left;
 } */
 
 
 /*Stay on right.*/
+
 
 /* .right {
     float: right;
@@ -214,7 +216,6 @@ circle {
     display: inline-block;
 }
 
-
 .PickNRow {
     display: flex;
     width: 100%;
@@ -275,4 +276,20 @@ circle {
 .QualificationResultTemplate2 .img-overlay-wrap {
     display: block;
     margin: auto;
+}
+
+#Task3_Quality_Ranking {
+    box-sizing: border-box;
+}
+
+#Task3_Quality_Ranking .column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+#Task3_Quality_Ranking .row::after {
+    content: "";
+    clear: both;
+    display: table;
 }
