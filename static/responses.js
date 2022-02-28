@@ -28,7 +28,9 @@ async function setupStuff() {
     GLOBAL_RESPONSES = await getResultsFromConfigTypeAndConfigName(GLOBAL_CONFIG_TYPE, GLOBAL_CONFIG_NAME);
     let config_type = GLOBAL_CONFIG_TYPE;
     let config_name = GLOBAL_CONFIG_NAME;
-    GLOBAL_CONFIG = await getConfigFromConfigTypeAndConfigName(config_type, config_name);
+    // GLOBAL_CONFIG = await getConfigFromConfigTypeAndConfigName(config_type, config_name);
+    GLOBAL_CONFIG = GLOBAL_RESPONSES.GLOBAL_CONFIG;
+    // console.log(GLOBAL_RESPONSES);
 
     console.log(GLOBAL_CONFIG);
     console.log(GLOBAL_RESPONSES);
@@ -40,7 +42,10 @@ async function setupStuff() {
     let examples = await picknGetImagesFromAnnotationsFromChoices(GLOBAL_CONFIG["QUERY_EXAMPLES"], GLOBAL_RESPONSES["QUERY_EXAMPLES_RESPONSES"]);
     for (let i = 0; i < examples.length; i++) {
 
-        examples[i].children[1].children[GLOBAL_RESPONSES["QUERY_EXAMPLES_RESPONSES"][i]].style.border = "10px solid green";
+        // get the index
+        // console.log(examples[i].children[1].children);
+        let choice_idx = GLOBAL_CONFIG.QUERY_EXAMPLES[i].choices.indexOf(GLOBAL_RESPONSES["QUERY_EXAMPLES_RESPONSES"][i]);
+        examples[i].children[1].children[choice_idx].style.border = "10px solid green";
 
         let example = document.getElementById("ExampleTemplate");
         example.getElementsByClassName("ExampleTemplateClass1")[0].innerHTML = "Example " + (i + 1).toString();

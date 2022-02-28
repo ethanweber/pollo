@@ -200,17 +200,18 @@ class Requester(object):
                 continue
             else:
                 assert len(assignments_list["Assignments"]) >= 1
-            if self.database[self.get_sandox_key()][hit_id]["response"] is None:
-                # answers
-                answer_dict = xmltodict.parse(assignments_list["Assignments"][0]['Answer'])
-                print(answer_dict)
-                # TODO(ethan): need to finish this part!
-                # # print(len(answer_dict))
-                # try:
-                #     answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
-                # except:
-                #     answer = answer_dict['QuestionFormAnswers']['Answer'][0]["FreeText"]
-                # self.database[self.get_sandox_key()][external_url]["response"] = json.loads(answer)
+            # if self.database[self.get_sandox_key()][hit_id]["response"] is None:
+            answers = []
+            # NOTE(ethan): notice that now we have multiple responses...
+            for idx in range(assignments_list["NumResults"]):
+                print("something")
+                answer_dict = xmltodict.parse(assignments_list["Assignments"][idx]['Answer'])
+                AssignmentId = assignments_list["Assignments"][idx]["AssignmentId"]
+                answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
+                answer = json.loads(answer)
+                answer["AssignmentId"] = AssignmentId
+                answers.append(answer)
+            self.database[self.get_sandox_key()][hit_id]["response"] = answers
         # write database
         self.write_database()
 
@@ -220,14 +221,16 @@ class Requester(object):
             external_urls.append("{}/mturk/{}".format(PUBLIC_URL, hit_name))
         return external_urls
 
-    def save_mturk_parsed_results_to_file(self, response_dict):
+    def save_mturk_parsed_results_to_file(self, response_list):
         """Save the HIT to file.
         """
         # TODO(ethan): need to update to support multiple assignments from "MaxAssignments"
-        filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
-                                response_dict["GLOBAL_CONFIG_NAME"] + ".json")
-        goat.make_dir(filename)
-        goat.write_to_json(filename, response_dict)
+        for response in response_list:
+            AssignmentId = response["AssignmentId"]
+            filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
+                                    response_list[0]["GLOBAL_CONFIG_NAME"] + f"-{AssignmentId}.json")
+            goat.make_dir(filename)
+            goat.write_to_json(filename, response)
 
     def save_all_responses_to_files(self, responses):
         for hit_id in tqdm(responses.keys()):
