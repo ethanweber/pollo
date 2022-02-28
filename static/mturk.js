@@ -1,5 +1,4 @@
 // some global variables
-var GLOBAL_IMAGE_HEIGHT = 300;
 var GLOBAL_IMAGE_WIDTH = null;
 
 
@@ -20,11 +19,7 @@ var GLOBAL_ALL_EXAMPLES = null;
 var GLOBAL_ALL_IDS = null;
 var GLOBAL_ALL_INDICES = null;
 var GLOBAL_ALL_RESPONSES = null;
-var GLOBAL_ALL_ANSWERS = null;
 var GLOBAL_ALL_CURRENT_IDX = 0;
-
-// minimum time for example (to filter low quality response based on time)
-var GLOBAL_MIN_TIME_PER_EXAMPLE = 2.0; // 15.0
 
 var GLOBAL_FIRST_TIME = true;
 
@@ -100,17 +95,17 @@ async function setupAllPages() {
 }
 
 function initializeArrays() {
-
     // flip the GT_HIDDEN_EXAMPLES as well and add to the query list
     let GT_HIDDEN_EXAMPLES_COPY = JSON.parse(JSON.stringify(GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"]));
-    for (let i = 0; i < GT_HIDDEN_EXAMPLES_COPY.length; i++) {
-        GT_HIDDEN_EXAMPLES_COPY[i].urls.reverse()
-    }
+    // for (let i = 0; i < GT_HIDDEN_EXAMPLES_COPY.length; i++) {
+    //     GT_HIDDEN_EXAMPLES_COPY[i].urls.reverse()
+    // }
+    // NOTE(ethan): not actually reversing right now...to avoid any mistakes...
+    // [gt query examples, qt query examples reversed, query examples]
     GLOBAL_ALL_EXAMPLES = GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].concat(GT_HIDDEN_EXAMPLES_COPY).concat(GLOBAL_CONFIG["QUERY_EXAMPLES"]);
     GLOBAL_ALL_IDS = Array(GLOBAL_ALL_EXAMPLES.length).fill(null);
     GLOBAL_ALL_INDICES = Array(GLOBAL_ALL_EXAMPLES.length).fill(null);
     GLOBAL_ALL_RESPONSES = Array(GLOBAL_ALL_EXAMPLES.length).fill(null);
-
     GLOBAL_EXAMPLE_RESPONSES = Array(GLOBAL_CONFIG["EXAMPLES"].length).fill(false);
 }
 
@@ -157,21 +152,6 @@ document.onkeydown = function(e) {
     // shortcuts
     if (GLOBAL_KEYPRESS_BUFFER == "OIOI") {
         goToPage("AnnotationTestStart");
-    }
-
-    // console.log(keycode);
-    switch (GLOBAL_CONFIG["settings"]["type"]) {
-        case "binary":
-            binaryKeyControls(keycode);
-            break;
-        case "pickn":
-            picknKeyControls(keycode);
-            break;
-        case "polygon":
-            polygonKeyControls(keycode);
-            break;
-        default:
-            console.log("Sorry, something went wrong with this HIT.");
     }
 };
 

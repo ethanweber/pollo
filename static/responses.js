@@ -1,5 +1,4 @@
 // some global variables
-var GLOBAL_IMAGE_HEIGHT = 200;
 var GLOBAL_IMAGE_WIDTH = null;
 var GLOBAL_IMAGE_MAX_WIDTH = null;
 var GLOBAL_RESPONSES = null;
@@ -11,7 +10,7 @@ var GLOBAL_PICKN_CHOICES = null;
 
 
 // entrypoint for the site, which is the instructions.
-$(document).ready(function () {
+$(document).ready(function() {
     setupStuff();
 });
 

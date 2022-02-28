@@ -278,17 +278,13 @@ circle {
     margin: auto;
 }
 
-#Task3_Quality_Ranking {
-    box-sizing: border-box;
-}
-
-#Task3_Quality_Ranking .column {
+.column {
     float: left;
     width: 33.33%;
     padding: 5px;
 }
 
-#Task3_Quality_Ranking .row::after {
+.row::after {
     content: "";
     clear: both;
     display: table;

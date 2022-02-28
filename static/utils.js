@@ -27,7 +27,7 @@ async function getResultsFromConfigTypeAndConfigName(config_type, config_name) {
 }
 
 // Return the HTML with the nicely formatted, zoomed in, annotation. Polygons on top. :)
-function getImageWithBox(image_url, bbox) {
+function getImageWithBox(image_url, bbox, label) {
 
     let container = document.createElement('div');
     container.setAttribute("class", "img-overlay-wrap");
@@ -39,7 +39,7 @@ function getImageWithBox(image_url, bbox) {
     // set the image url
     image.src = image_url;
 
-    image.height = GLOBAL_IMAGE_HEIGHT;
+    image.height = GLOBAL_CONFIG.settings.image_height;
 
     if (bbox !== null) {
         // pull out the bounding box data
@@ -50,7 +50,7 @@ function getImageWithBox(image_url, bbox) {
         let image_width = bbox[4];
         let image_height = bbox[5];
 
-        let y_scalar = GLOBAL_IMAGE_HEIGHT / image_height;
+        let y_scalar = GLOBAL_CONFIG.settings.image_height / image_height;
         let x_scalar = y_scalar;
         // let y_scalar = 1.0;
         // let x_scalar = 1.0;
@@ -76,6 +76,12 @@ function getImageWithBox(image_url, bbox) {
         polygon.points.appendItem(bl);
     }
 
+    if (label !== null) {
+        let labeldiv = document.createElement('div');
+        labeldiv.innerHTML = label;
+        container.appendChild(labeldiv);
+    }
+
 
     let outercontainer = document.createElement('div');
     outercontainer.appendChild(container);
@@ -88,7 +94,7 @@ function getVideo(image_url) {
     container.setAttribute("class", "img-overlay-wrap");
     container.setAttribute("width", "100%");
     let video = document.createElement('video');
-    video.height = GLOBAL_IMAGE_HEIGHT;
+    video.height = GLOBAL_CONFIG.settings.image_height;
     video.src = image_url;
     video.setAttribute("controls", "controls");
     video.setAttribute("preload", "metadata");
@@ -111,7 +117,7 @@ function getPicknAnnotationAsDiv(example) {
     for (let i = 0; i < images_and_boxes.length; i++) {
         let image_url = images_and_boxes[i][0];
         let bbox = images_and_boxes[i][1]; // which might be null
-        let imagehtml = getImageWithBox(image_url, bbox);
+        let imagehtml = getImageWithBox(image_url, bbox, null);
         shotchangeRow.appendChild(imagehtml);
     }
     annotationHTML.appendChild(shotchangeRow);
@@ -137,13 +143,15 @@ function getPicknAnnotationAsDiv(example) {
 // Get the pickn annotation as a div.
 function getBiasganAnnotationAsDiv(example) {
     let annotationHTML = document.createElement('div');
-    annotationHTML.setAttribute("class", "PickNRow");
-    let urls = example.urls;
     let shotchangeRow = document.createElement('div');
     shotchangeRow.setAttribute("class", "PickNRow");
-    for (let i = 0; i < urls.length; i++) {
-        let image_url = urls[i];
-        let imagehtml = getImageWithBox(image_url, null);
+    for (let i = 0; i < example.urls.length; i++) {
+        let image_url = example.urls[i];
+        let label = null;
+        if ('url_labels' in example) {
+            label = example.url_labels[i];
+        }
+        let imagehtml = getImageWithBox(image_url, null, label);
         shotchangeRow.appendChild(imagehtml);
     }
     annotationHTML.appendChild(shotchangeRow);

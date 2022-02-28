@@ -147,7 +147,7 @@ class Requester(object):
                 "response": None
             }
             # update database
-            self.database[self.get_sandox_key()][external_url] = info
+            self.database[self.get_sandox_key()][hit_id] = info
         except:
             raise ValueError("HIT did not submit properly.")
 
@@ -175,39 +175,42 @@ class Requester(object):
 
     def get_responses_from_database(self):
         responses = {}
-        for external_url in self.database[self.get_sandox_key()].keys():
-            if self.database[self.get_sandox_key()][external_url]["use_sandbox"] and not self.use_sandbox:
+        for hit_id in self.database[self.get_sandox_key()].keys():
+            if self.database[self.get_sandox_key()][hit_id]["use_sandbox"] and not self.use_sandbox:
                 continue
-            info = self.database[self.get_sandox_key()][external_url]
+            info = self.database[self.get_sandox_key()][hit_id]
             response = info["response"]
             if response is not None:
-                responses[external_url] = response
+                responses[hit_id] = response
         return responses
 
     def update_database_with_responses(self):
         # go through the hits
-        for external_url in tqdm(self.database[self.get_sandox_key()].keys()):
-            hit_id = self.database[self.get_sandox_key()][external_url]["hit_id"]
+        for hit_id in tqdm(self.database[self.get_sandox_key()].keys()):
+            # hit_id = self.database[self.get_sandox_key()][external_url]["hit_id"]
             # only consider sandbox or non sandbox
-            if self.database[self.get_sandox_key()][external_url]["use_sandbox"] and not self.use_sandbox:
+            if self.database[self.get_sandox_key()][hit_id]["use_sandbox"] and not self.use_sandbox:
                 continue
             assignments_list = self.client.list_assignments_for_hit(
                 HITId=hit_id,
-                MaxResults=1
+                MaxResults=100
             )
             if assignments_list["NumResults"] == 0:
+                print("No results.")
                 continue
             else:
                 assert len(assignments_list["Assignments"]) >= 1
-            if self.database[self.get_sandox_key()][external_url]["response"] is None:
+            if self.database[self.get_sandox_key()][hit_id]["response"] is None:
+                # answers
                 answer_dict = xmltodict.parse(assignments_list["Assignments"][0]['Answer'])
-                # print(answer_dict)
-                # print(len(answer_dict))
-                try:
-                    answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
-                except:
-                    answer = answer_dict['QuestionFormAnswers']['Answer'][0]["FreeText"]
-                self.database[self.get_sandox_key()][external_url]["response"] = json.loads(answer)
+                print(answer_dict)
+                # TODO(ethan): need to finish this part!
+                # # print(len(answer_dict))
+                # try:
+                #     answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
+                # except:
+                #     answer = answer_dict['QuestionFormAnswers']['Answer'][0]["FreeText"]
+                # self.database[self.get_sandox_key()][external_url]["response"] = json.loads(answer)
         # write database
         self.write_database()
 
@@ -220,19 +223,20 @@ class Requester(object):
     def save_mturk_parsed_results_to_file(self, response_dict):
         """Save the HIT to file.
         """
+        # TODO(ethan): need to update to support multiple assignments from "MaxAssignments"
         filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
                                 response_dict["GLOBAL_CONFIG_NAME"] + ".json")
         goat.make_dir(filename)
         goat.write_to_json(filename, response_dict)
 
     def save_all_responses_to_files(self, responses):
-        for external_url in tqdm(responses.keys()):
-            self.save_mturk_parsed_results_to_file(responses[external_url])
+        for hit_id in tqdm(responses.keys()):
+            self.save_mturk_parsed_results_to_file(responses[hit_id])
 
     def get_mean_time_from_resonses(self, responses):
         times = []
-        for external_url in responses:
-            t = responses[external_url]["GLOBAL_REAL_TEST_TIME"]
+        for hit_id in responses:
+            t = responses[hit_id]["GLOBAL_REAL_TEST_TIME"]
             times.append(t)
         times = np.array(times)
         return times.mean()

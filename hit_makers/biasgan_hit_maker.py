@@ -38,9 +38,11 @@ class BiasganHitMaker(HitMaker):
         hit["QUERY_EXAMPLES"] = query_examples
         return hit
 
-    def get_example(self, urls, choices=None, answer=None, description=None):
+    def get_example(self, urls=None, url_labels=None, choices=None, answer=None, description=None):
         example = {}
         example["urls"] = urls
+        if url_labels:
+            example["url_labels"] = url_labels
         if choices:
             example["choices"] = choices
         if answer:
@@ -151,7 +153,7 @@ class BiasganHitMakerBetter(BiasganHitMaker):
         for imageA, imageB, label, reason in zip(d["imageA"], d["imageB"], d["label"], d["reason"]):
             urlA = os.path.join(self.endpoint, "static/data/media", media_folder, "examples", imageA)
             urlB = os.path.join(self.endpoint, "static/data/media", media_folder, "examples", imageB)
-            examples.append(self.get_example(urls=[urlA, urlB], choices=choices, answer=label, description=reason))
+            examples.append(self.get_example(urls=[urlA, urlB], url_labels=["Image A", "Image B"], choices=choices, answer=label, description=reason))
         # populate the gt query examples
         gt_query_examples = []
         d = pd.read_csv(goat.pjoin(media_directory, media_folder, "ground_truth.csv"))
@@ -159,14 +161,16 @@ class BiasganHitMakerBetter(BiasganHitMaker):
             urlA = os.path.join(self.endpoint, "static/data/media", media_folder, "ground_truth", imageA)
             urlB = os.path.join(self.endpoint, "static/data/media", media_folder, "ground_truth", imageB)
             gt_query_examples.append(self.get_example(
-                urls=[urlA, urlB], choices=choices, answer=label, description=None))
+                urls=[urlA, urlB], url_labels=["Image A", "Image B"], choices=choices, answer=label, description=None))
         # populate the query examples
+        d = pd.read_csv(goat.pjoin(media_directory, media_folder, "intersplit_ranking_query.csv"))
         query_folder_to_query_examples = defaultdict(list)
         for query_folder in os.listdir(goat.pjoin(media_directory, media_folder, "query")):
-            for image in os.listdir(goat.pjoin(media_directory, media_folder, "query", query_folder)):
-                url = os.path.join(self.endpoint, "static/data/media", media_folder, "query", query_folder, image)
+            for imageA, imageB in zip(d["item1_image_url"], d["item2_image_url"]):
+                urlA = os.path.join(self.endpoint, "static/data/media", media_folder, "query", query_folder, imageA)
+                urlB = os.path.join(self.endpoint, "static/data/media", media_folder, "query", query_folder, imageB)
                 query_folder_to_query_examples[query_folder].append(self.get_example(
-                    urls=[url], choices=choices, answer=None, description=None))
+                    urls=[urlA, urlB], url_labels=["Image A", "Image B"], choices=choices, answer=None, description=None))
         query_folder_to_query_examples = dict(query_folder_to_query_examples)
         return {
             "task": "Task3_Quality_Ranking",

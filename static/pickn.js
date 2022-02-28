@@ -1,39 +1,3 @@
-// Handle keypresses for quick navigation of interface.
-function picknKeyControls(keycode) {
-
-    // if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {
-    //     switch (keycode) {
-    //         case 66:
-    //             // 'b' for back
-    //             if (GLOBAL_ALL_CURRENT_IDX === 0) {
-    //                 break;
-    //             }
-    //             picknSetCurrentAnnotationDiv(GLOBAL_ALL_CURRENT_IDX - 1);
-    //             break;
-    //     }
-    // }
-}
-
-function picknIsGtCorrect(ious) {
-    for (let i = 0; i < ious.length; i++) {
-        let iou = ious[i];
-        if (iou > 0.75) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function picknIsGtCorrectWithAnswer(ious, index) {
-    for (let i = 0; i < ious.length; i++) {
-        let iou = ious[i];
-        if (iou > 0.75 && i === index) {
-            return true;
-        }
-    }
-    return false;
-}
-
 // Set all content for the pickn task.
 async function picknSetContent() {
 
@@ -129,98 +93,6 @@ function picknSetCurrentAnnotationDiv(idx) {
     document.getElementById("AnnotationTestImageCount").innerHTML = (idx + 1).toString() + "/ " + (GLOBAL_ALL_IDS.length).toString();
 }
 
-function picknpicknGetPercentCorrect(start, end) {
-    let num_correct = 0;
-    let denom = 0;
-    for (let i = start; i < end; i++) {
-        let answer = GLOBAL_QUALIFICATION_RESPONSES[i];
-        let correct = false;
-        if (answer < 11) {
-            correct = picknIsGtCorrectWithAnswer(GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][i]["ious"], GLOBAL_QUALIFICATION_RESPONSES[i]);
-        } else if (answer === 11 && !picknIsGtCorrect(GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][i]["ious"])) {
-            correct = true;
-        }
-        if (correct) {
-            num_correct += 1;
-        }
-        denom += 1;
-    }
-    return num_correct / denom;
-}
-
-function picknGetSpeedMessage() {
-    TotalTestTime = GLOBAL_END_QUALIFICATION_TEST - GLOBAL_START_QUALIFICATION_TEST;
-
-    var tmpStrFeed = "<h3> You completed the qualification test in <strong>" + TotalTestTime.toString() + "</strong> seconds.</h3> <h5> The expected time was 50 seconds.</h5>";
-    var SpeedComment = "";
-
-    if (TotalTestTime > 2 * 50) {
-        SpeedComment = "<h5>Your speed is very slow. If you continue with the same speed you will not manage to finish the HIT in the alloted time. Please <strong>do not</strong> take any breaks in the middle of the task. </h5>";
-        tmpStrFeed = tmpStrFeed.concat(SpeedComment);
-    } else if (TotalTestTime > 50) {
-        SpeedComment = "<h5>Your speed is a bit slow. If you continue with the same speed you may not manage to finish the HIT in the alloted time. Please <strong>do not</strong> take any breaks in the middle of the task.</h5>";
-        tmpStrFeed = tmpStrFeed.concat(SpeedComment);
-    } else if (TotalTestTime <= 50) {
-        SpeedComment = "<h5>Please continue doing the task with the same speed and <strong>do not</strong> take any breaks in the middle of the task.</h5>";
-        tmpStrFeed = tmpStrFeed.concat(SpeedComment);
-    }
-
-    return tmpStrFeed;
-}
-
-function picknGetValidIndicesString(ious) {
-    // find the indices that are correct
-    let indices = "";
-    for (let i = 0; i < ious.length; i++) {
-        if (ious[i] > 0.75) {
-            indices += i.toString() + ", ";
-        }
-    }
-    if (indices === "") {
-        indices = "None";
-    }
-    return indices;
-}
-
-function picknGetFeedbackContent(idx) {
-    let answer = GLOBAL_QUALIFICATION_RESPONSES[idx];
-    let isCorrect = false;
-    if (answer < 11) {
-        isCorrect = picknIsGtCorrectWithAnswer(GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["ious"], answer);
-    } else if (answer === 11 && !picknIsGtCorrect(GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["ious"])) {
-        isCorrect = true;
-    }
-    let FeedbackText = "";
-    let FeedbackTextColor = "";
-
-    let valid_indices_string = picknGetValidIndicesString(GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["ious"]);
-
-    if (isCorrect) {
-        FeedbackText = "Well done! Your answer was correct."
-        FeedbackTextColor = "green";
-    } else {
-        FeedbackText = "Sorry. Your answer is wrong.";
-        FeedbackTextColor = "red";
-    }
-
-    let qual_result_template = document.getElementById("QualificationResultTemplate");
-    qual_result_template.getElementsByClassName("QualificationResultTemplate1")[0].innerHTML = "TODO"; //GLOBAL_CLASS_IDX_TO_CLASS_NAME[GLOBAL_CONFIG["QUALIFICATION_EXAMPLES"][idx]["class_idx"]];
-
-    // show the image as well
-    qual_result_template.getElementsByClassName("QualificationResultTemplate2")[0].innerHTML =
-        document.getElementById(GLOBAL_QUALIFICATION_IDS[idx]).getElementsByClassName("PicknQuestionImage")[0].innerHTML;
-
-    FeedbackText = "<font color='" + FeedbackTextColor + "'>" + FeedbackText + "</font>";
-    if (answer === 11) {
-        answer = "None";
-    }
-    qual_result_template.getElementsByClassName("QualificationResultTemplate3")[0].innerHTML = "The valid indices are " + valid_indices_string + ", and you said " + answer + ".<br>";
-    qual_result_template.getElementsByClassName("QualificationResultTemplate3")[0].innerHTML += FeedbackText;
-    qual_result_template.getElementsByClassName("QualificationResultTemplate3")[0].innerHTML += "<hr>";
-
-    return qual_result_template.innerHTML;
-}
-
 // Get the items for any given page.
 async function getExamplesDivsFromConfig(example) {
     let examples = [];
@@ -256,8 +128,6 @@ function picknGetAnswerAsString() {
 
     answer["GLOBAL_REAL_TEST_TIME"] = GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST; // time for the test
 
-
-    // $('#global_config').val(GLOBAL_CONFIG);
     // save the entire config
     answer["GLOBAL_CONFIG"] = GLOBAL_CONFIG;
 
@@ -269,14 +139,42 @@ function picknGetAnswerAsString() {
 function picknGetNumCorrect() {
     // also set the responses
     let num_correct = 0;
+    let num_consistent = 0;
     for (let i = 0; i < GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length; i++) {
         let idx = GLOBAL_ALL_INDICES[i];
         let idx_flipped = GLOBAL_ALL_INDICES[i + GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length];
-        if (GLOBAL_ALL_RESPONSES[idx] !== GLOBAL_ALL_RESPONSES[idx_flipped]) {
+
+        // idx and idx_flipped should have the same answer!
+        // if ("url_labels" in GLOBAL_ALL_EXAMPLES[idx]) {
+        //     // correct for reversal and make sure they have the same answer
+        //     if (GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
+        //         num_consistent += 1;
+        //     }
+        // } else {
+        //     // make sure they have the same answer!
+        //     if (GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
+        //         num_consistent += 1;
+        //     }
+        // }
+
+        // make sure they have the same answer!
+        if (GLOBAL_ALL_RESPONSES[idx] !== null &&
+            GLOBAL_ALL_RESPONSES[idx_flipped] !== null &&
+            GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
+            num_consistent += 1;
+        }
+
+        // make sure the correct answer
+        let examples_idx = parseInt(GLOBAL_ALL_IDS[idx].replace("ALL_EXAMPLES:", ""));
+        if (GLOBAL_ALL_RESPONSES[idx] !== null &&
+            GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_EXAMPLES[examples_idx].answer) {
             num_correct += 1;
         }
     }
-    return num_correct;
+    return {
+        "num_correct": num_correct,
+        "num_consistent": num_consistent
+    };
 }
 
 function picknAttemptSubmit() {
@@ -285,25 +183,27 @@ function picknAttemptSubmit() {
     $('#assignment').val(ASSIGNMENT_ID);
     let answer = picknGetAnswerAsString();
     console.log(answer);
-    // answer
-    // $('#global_config').val(GLOBAL_CONFIG);
     $('#answer').val(answer);
     document.getElementById("submitid").submit();
 }
 
 function picknMaybeEnableSubmitButton() {
-    let num_correct = picknGetNumCorrect();
+    let temp = picknGetNumCorrect();
+    let num_correct = temp.num_correct;
+    let num_consistent = temp.num_consistent; // TODO(ethan): deal with this!
     goToPage("Finish");
-    if ((GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST) <= GLOBAL_MIN_TIME_PER_EXAMPLE * GLOBAL_ALL_IDS.length) {
+    if ((GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST) <= GLOBAL_CONFIG.settings.min_seconds_per_query_example * GLOBAL_ALL_IDS.length) {
         let time_used = GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST;
         document.getElementById("FinishHeading").innerHTML = "Task Failed";
-        document.getElementById("FinishText").innerHTML = "<p>You went too fast, completing the HIT in " + time_used.toString() + " seconds, or (" + (time_used / 60.0).toString() + " minutes), much faster that the suggested time.</p>";
+        document.getElementById("FinishText").innerHTML = "<p>You went too fast, completing the HIT in " + time_used.toString() + " seconds, or (" + (time_used / 60.0).toString() + " minutes), faster that the suggested time. Please slow down.</p>";
         return;
-    } else if (num_correct >= GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length) {
+    } else if (
+        num_correct >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length 
+        && num_consistent >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length) {
         document.getElementById("FinishHeading").innerHTML = "Task Completed";
     } else {
         document.getElementById("FinishHeading").innerHTML = "Task Failed";
-        document.getElementById("FinishText").innerHTML = "<p>Your consitency for this HIT was quite low. Please return the HIT.</p>";
+        document.getElementById("FinishText").innerHTML = "<p>Your accuracy and/or consitency for this HIT was quite low. Please return the HIT.</p>";
         document.getElementById("FinishText").innerHTML += "<p>If you would like to try again, we suggest pay careful attention to your responses.</p>"
         return;
     }
@@ -336,7 +236,8 @@ function picknLeftClickControls(e) {
             // this should be the div of the example element!
             let element = e.target.parentNode.parentNode.parentNode.parentNode.parentNode;
             let index = element.getAttribute("index");
-            element.getElementsByClassName("ExampleTemplateText1")[0].innerHTML = GLOBAL_CONFIG["EXAMPLES"][index]["description"] + "<hr>";
+            element.getElementsByClassName("ExampleTemplateText1")[0].innerHTML =
+                "The answer is \"" + GLOBAL_CONFIG["EXAMPLES"][index]["answer"] + "\" because: " + GLOBAL_CONFIG["EXAMPLES"][index]["description"] + "<hr>";
             GLOBAL_EXAMPLE_RESPONSES[index] = true;
 
             // check if all descriptions are shown in order to move on
@@ -355,7 +256,8 @@ function picknLeftClickControls(e) {
         } else if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {
             picknClearAllHighlights();
             e.target.style.border = "10px solid green";
-            clickedIndex = parseInt(e.target.innerHTML);
+            // clickedIndex = parseInt(e.target.innerHTML);
+            clickedIndex = e.target.innerHTML;
             setTimeout(function() {
                 // set the index as an answer
                 if (GLOBAL_CURRENT_PAGE === "AnnotationTest") {

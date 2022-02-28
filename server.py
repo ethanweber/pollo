@@ -14,6 +14,8 @@ from flask import (Flask,
 import os
 import json
 import goat
+import string
+import random
 
 parser = argparse.ArgumentParser(description="")
 parser.add_argument("--port", type=int, default=8891, help='an integer for the accumulator')
@@ -54,7 +56,10 @@ def submit_external_submit():
 
     content["answer"] = json.loads(content["answer"])
     config_name = content["answer"]["GLOBAL_CONFIG_NAME"]
-    filename = os.path.join(LOCAL_RESPONSE_FOLDER, config_name + ".json")
+
+
+    fake_AssignmentId = ''.join(random.choice(string.ascii_lowercase) for i in range(6))
+    filename = os.path.join(LOCAL_RESPONSE_FOLDER, config_name + f"-{fake_AssignmentId}.json")
     goat.write_to_json(filename, content["answer"])
     return jsonify({"info": "saved to {}".format(filename)})
 
