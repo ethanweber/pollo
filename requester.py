@@ -203,13 +203,16 @@ class Requester(object):
             # if self.database[self.get_sandox_key()][hit_id]["response"] is None:
             answers = []
             # NOTE(ethan): notice that now we have multiple responses...
+            # assert assignments_list["NumResults"] == 3
             for idx in range(assignments_list["NumResults"]):
-                print("something")
+                # print("something")
                 answer_dict = xmltodict.parse(assignments_list["Assignments"][idx]['Answer'])
                 AssignmentId = assignments_list["Assignments"][idx]["AssignmentId"]
+                WorkerId = assignments_list["Assignments"][idx]["WorkerId"]
                 answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
                 answer = json.loads(answer)
                 answer["AssignmentId"] = AssignmentId
+                answer["WorkerId"] = WorkerId
                 answers.append(answer)
             self.database[self.get_sandox_key()][hit_id]["response"] = answers
         # write database
@@ -226,9 +229,10 @@ class Requester(object):
         """
         # TODO(ethan): need to update to support multiple assignments from "MaxAssignments"
         for response in response_list:
-            AssignmentId = response["AssignmentId"]
+            # AssignmentId = response["AssignmentId"]
+            WorkerId = response["WorkerId"]
             filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
-                                    response_list[0]["GLOBAL_CONFIG_NAME"] + f"-{AssignmentId}.json")
+                                    response_list[0]["GLOBAL_CONFIG_NAME"] + f"-{WorkerId}.json")
             goat.make_dir(filename)
             goat.write_to_json(filename, response)
 
