@@ -2,5 +2,7 @@
 __pycache__/
 old
 static/data
-mturk_creds.json
-mturk_database.pkl
+mturk_*.json
+mturk_*.pkl
+*egg-info/
+__MACOSX/

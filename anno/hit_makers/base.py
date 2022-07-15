@@ -1,8 +1,10 @@
 import os
-import goat
+
+from os.path import join as pjoin
+import anno.utils.io as io_utils
 
 
-class HitMaker():
+class HitMaker:
     """
     """
 
@@ -35,8 +37,8 @@ class HitMaker():
     def save(self, hit_name, hit):
         self.validate_hit(hit)
         # assert self.project_name is not None
-        filename = goat.pjoin(goat.io_utils.get_git_root(os.path.abspath(__file__)),
-                              "static/data/hits", hit_name + ".json")
+        filename = pjoin(io_utils.get_git_root(os.path.abspath(__file__)),
+                         "static/data/hits", hit_name + ".json")
         assert not os.path.exists(filename), filename
-        goat.make_dir(filename)
-        goat.write_to_json(filename, hit)
+        io_utils.make_dir(filename)
+        io_utils.write_to_json(filename, hit)

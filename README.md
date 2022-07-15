@@ -1,14 +1,8 @@
 # ANNO: A codebase for computer vision Amazon MTurk Annotation (AMT) tasks
 
-> This repo is a compilation of code for AMT that I use or have used for annotation tasks for computer vision purposes (e.g., binary verification, image classification, qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
+> This repo is a compilation of code for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
 
 The main idea for this repo is to specify a JSON file descripting each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task.
-
-### Use cases (implemented)
-
-- [x] Qualitative user studies
-- [ ] Binary classification
-- [ ] 
 
 ### Folder structure
 
@@ -23,7 +17,7 @@ The main idea for this repo is to specify a JSON file descripting each HIT (Huma
         |-responses/
             |-<hit_name>.json
         |-media/ # here you can store images or videos
-|-hit_makers/
+|-anno/hit_makers/
     |-hit_maker.py
     |-biasgan_hit_maker.py
 
@@ -36,16 +30,19 @@ The main idea for this repo is to specify a JSON file descripting each HIT (Huma
 |-mturk_database.pkl
 ```
 
-### Install dependencies
+### Getting started
 
+Create a conda environment
+
+```bash
+conda create --name anno python=3.8.13
+conda activate anno
 ```
-# install dependencies
-pip install -r requirements.txt
 
-# install goat
-git clone git@github.com:ethanweber/goat.git
-cd goat
-python setup.py
+Install the repo as a Python package. This will also install the dependencies.
+
+```bash
+python setup.py develop
 ```
 
 ### Setup data
@@ -53,6 +50,7 @@ python setup.py
 First, you need to add data to the `static/data/` folder, as specified above.
 
 For media, this might be a symbolic link.
+
 ```
 cd static/data/media
 ln -l /path/to/images images
@@ -61,14 +59,13 @@ ln -l /path/to/images images
 When referencing an asset in the static folder, e.g., an image, you can use the `path` that starts after "static".
 E.g., "data/media/images/<>"
 
-
 Note:
 pages/img_classify.html and static/img_classify/ aren't very well integrated into the MTURK pipeline yet.
-
 
 ### Server configuration
 
 ```
+
 # add needed publically accessible files to static/ folder
 
 # start the server
@@ -87,3 +84,22 @@ https://myurl.mydomain/mturk/<hit_name>
 https://myurl.mydomain/responses/<hit_name>
 
 ```
+
+### MTurk credentials
+
+Setup MTurk credentials. Create a file named "mturk_creds.json" and place it in the root directory of this repo. It should have the following content.
+
+```json
+{
+    "aws_access_key_id": "<aws_access_key_id>",
+    "aws_secret_access_key": "<aws_secret_access_key>"
+}
+```
+
+### Projects that used this code
+
+Here are some projects that have used this code (or versions of it). The code presented in this repo is a general implementation for qualitative user studies. However, it was and can be modified for more specific use cases.
+
+- [BiasGAN]()
+    - In this paper, there were three tasks for comparing images.
+- [Friends]() - In this paper, the task was a qualitative user study comparing two videos against one another. The user was instructed to select which video looked more realistic.
