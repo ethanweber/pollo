@@ -1,14 +1,13 @@
+import json
+import os
+import pickle
 import pprint
+
 import boto3
-import requests
-from tqdm import tqdm
 import numpy as np
 import xmltodict
-import json
-import pickle
-import os
-import goat
-
+from tqdm import tqdm
+from anno.utils.io import get_absolute_path, make_dir, write_to_json
 
 PUBLIC_URL = "https://friends.ethanweber.me"
 
@@ -208,11 +207,9 @@ class Requester(object):
                 # print("something")
                 answer_dict = xmltodict.parse(assignments_list["Assignments"][idx]['Answer'])
                 AssignmentId = assignments_list["Assignments"][idx]["AssignmentId"]
-                WorkerId = assignments_list["Assignments"][idx]["WorkerId"]
                 answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
                 answer = json.loads(answer)
                 answer["AssignmentId"] = AssignmentId
-                answer["WorkerId"] = WorkerId
                 answers.append(answer)
             self.database[self.get_sandox_key()][hit_id]["response"] = answers
         # write database
@@ -229,12 +226,9 @@ class Requester(object):
         """
         # TODO(ethan): need to update to support multiple assignments from "MaxAssignments"
         for response in response_list:
-            # AssignmentId = response["AssignmentId"]
-            WorkerId = response["WorkerId"]
-            filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static/data/responses",
-                                    response_list[0]["GLOBAL_CONFIG_NAME"] + f"-{WorkerId}.json")
-            goat.make_dir(filename)
-            goat.write_to_json(filename, response)
+            filename = get_absolute_path(os.path.join("static/data/responses", response_list[0]["GLOBAL_CONFIG_NAME"] + ".json"))
+            make_dir(filename)
+            write_to_json(filename, response)
 
     def save_all_responses_to_files(self, responses):
         for hit_id in tqdm(responses.keys()):
