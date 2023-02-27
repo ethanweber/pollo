@@ -64,26 +64,13 @@ pages/img_classify.html and static/img_classify/ aren't very well integrated int
 
 ### Server configuration
 
-```
-
-# add needed publically accessible files to static/ folder
-
-# start the server
-python server.py
-
-# add HTTPS to your server for access to answer
-# TODO(ethan): document how to do this
-https://docs.google.com/document/d/1kGumBejzK7UO2rvDBnPU9UvTUAftie0X-mydV-9BCtI/edit
-vim /etc/nginx/sites-available/reverse-proxy.conf
-
+Go to [REVERSE_PROXY.md](REVERSE_PROXY.md) for details!
 
 # go to the url
 https://myurl.mydomain/mturk/<hit_name>
 
 # or, after the responses are in from mturk
 https://myurl.mydomain/responses/<hit_name>
-
-```
 
 ### MTurk credentials
 
