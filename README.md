@@ -87,6 +87,7 @@ Setup MTurk credentials. Create a file named "mturk_creds.json" and place it in 
 
 Here are some projects that have used this code (or versions of it). The code presented in this repo is a general implementation for qualitative user studies. However, it was and can be modified for more specific use cases.
 
-- [BiasGAN]()
+- [Studying Bias in GANs through the Lens of Race (BiasGAN)](https://neerja.me/bias-gans/)
     - In this paper, there were three tasks for comparing images.
-- [Friends]() - In this paper, the task was a qualitative user study comparing two videos against one another. The user was instructed to select which video looked more realistic.
+- [Sitcoms3D](https://ethanweber.me/sitcoms3D/) - In this paper, the task was a qualitative user study comparing two videos against one another. The user was instructed to select which video looked more realistic.
+- [Learning2Listen](https://evonneng.github.io/learning2listen/)
