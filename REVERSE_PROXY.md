@@ -55,3 +55,8 @@ python -m http.server 8000
 ```
 
 If you can see the webpage, you are good to go. Now you can do something like ssh into a remote machine **from the VM** and forward a port **from the ssh'd machine to the VM**, which you can then see with HTTPS/SSL. Yay! Now go back to the other instructions to get your MTurk server running with `python server.py`. 😎
+
+
+# Resources
+
+Most of these instructions come from [https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/](https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/).

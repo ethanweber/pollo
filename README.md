@@ -1,4 +1,4 @@
-# ANNO: A codebase for computer vision Amazon MTurk Annotation (AMT) tasks
+# Anno: A codebase for computer vision Amazon MTurk Annotation (AMT) tasks
 
 > This repo is a compilation of code for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
 
