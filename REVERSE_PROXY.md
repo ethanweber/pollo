@@ -56,6 +56,8 @@ python -m http.server 8000
 
 If you can see the webpage, you are good to go. Now you can do something like ssh into a remote machine **from the VM** and forward a port **from the ssh'd machine to the VM**, which you can then see with HTTPS/SSL. Yay! Now go back to the other instructions to get your MTurk server running with `python server.py`. 😎
 
+If you make any changes to the `/etc/nginx/sites-available/reverse-proxy.conf` file, then run `sudo systemctl reload nginx` to reload nginx. Otherwise your changes won't be reflected. This is important if you, per say, need to change a port!
+
 One last thing -- on your local machine, you likely need to add the following to your ssh config file so that you can ssh from your VM to your computer with the python server (probably your research cluster).
 
 ```text
