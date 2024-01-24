@@ -140,35 +140,17 @@ function picknGetNumCorrect() {
     // also set the responses
     let num_correct = 0;
     let num_consistent = 0;
-    for (let i = 0; i < GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length; i++) {
+    let half_len = GLOBAL_CONFIG["QUERY_EXAMPLES"].length / 2;
+    for (let i = 0; i < half_len; i++) {
         let idx = GLOBAL_ALL_INDICES[i];
-        let idx_flipped = GLOBAL_ALL_INDICES[i + GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length];
+        let idx_flipped = GLOBAL_ALL_INDICES[i + half_len];
 
-        // idx and idx_flipped should have the same answer!
-        // if ("url_labels" in GLOBAL_ALL_EXAMPLES[idx]) {
-        //     // correct for reversal and make sure they have the same answer
-        //     if (GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
-        //         num_consistent += 1;
-        //     }
-        // } else {
-        //     // make sure they have the same answer!
-        //     if (GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
-        //         num_consistent += 1;
-        //     }
-        // }
-
-        // make sure they have the same answer!
+        // make sure they don't have the same answer
         if (GLOBAL_ALL_RESPONSES[idx] !== null &&
             GLOBAL_ALL_RESPONSES[idx_flipped] !== null &&
-            GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_RESPONSES[idx_flipped]) {
+            GLOBAL_ALL_RESPONSES[idx] !== GLOBAL_ALL_RESPONSES[idx_flipped]) {
             num_consistent += 1;
-        }
-
-        // make sure the correct answer
-        let examples_idx = parseInt(GLOBAL_ALL_IDS[idx].replace("ALL_EXAMPLES:", ""));
-        if (GLOBAL_ALL_RESPONSES[idx] !== null &&
-            GLOBAL_ALL_RESPONSES[idx] == GLOBAL_ALL_EXAMPLES[examples_idx].answer) {
-            num_correct += 1;
+            // console.log(idx, idx_flipped, GLOBAL_ALL_RESPONSES[idx], GLOBAL_ALL_RESPONSES[idx_flipped]);
         }
     }
     return {
@@ -189,8 +171,9 @@ function picknAttemptSubmit() {
 
 function picknMaybeEnableSubmitButton() {
     let temp = picknGetNumCorrect();
-    let num_correct = temp.num_correct;
+    // let num_correct = temp.num_correct;
     let num_consistent = temp.num_consistent; // TODO(ethan): deal with this!
+    let half_len = GLOBAL_CONFIG["QUERY_EXAMPLES"].length / 2;
     goToPage("Finish");
     if ((GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST) <= GLOBAL_CONFIG.settings.min_seconds_per_query_example * GLOBAL_ALL_IDS.length) {
         let time_used = GLOBAL_END_REAL_TEST - GLOBAL_START_REAL_TEST;
@@ -198,8 +181,9 @@ function picknMaybeEnableSubmitButton() {
         document.getElementById("FinishText").innerHTML = "<p>You went too fast, completing the HIT in " + time_used.toString() + " seconds, or (" + (time_used / 60.0).toString() + " minutes), faster that the suggested time. Please slow down.</p>";
         return;
     } else if (
-        num_correct >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length 
-        && num_consistent >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length) {
+        // num_correct >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * GLOBAL_CONFIG["GT_HIDDEN_EXAMPLES"].length 
+        // &&
+        num_consistent >= GLOBAL_CONFIG.settings.quality_control.min_percent_correct * half_len) {
         document.getElementById("FinishHeading").innerHTML = "Task Completed";
     } else {
         document.getElementById("FinishHeading").innerHTML = "Task Failed";

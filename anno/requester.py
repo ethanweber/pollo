@@ -13,14 +13,9 @@ PUBLIC_URL = "https://friends.ethanweber.me"
 
 
 class Requester(object):
-    """Class to handle all the MTurk API functions/requests.
-    """
+    """Class to handle all the MTurk API functions/requests."""
 
-    def __init__(self,
-                 use_sandbox=True,
-                 database_filename=None,
-                 creds_filename=None
-                 ):
+    def __init__(self, use_sandbox=True, database_filename=None, creds_filename=None):
         self.use_sandbox = use_sandbox
         self.worker_requirements = self.get_worker_requirements()
         self.task_attributes = None
@@ -30,13 +25,9 @@ class Requester(object):
         self.database_filename = database_filename
         self.creds_filename = creds_filename
         try:
-            self.database = pickle.load(
-                open(self.database_filename, "rb"))
+            self.database = pickle.load(open(self.database_filename, "rb"))
         except:
-            self.database = {
-                "sandbox": {},
-                "production": {}
-            }
+            self.database = {"sandbox": {}, "production": {}}
             print("No database found. Initializing it to:")
             pprint.pprint(self.database)
 
@@ -53,22 +44,21 @@ class Requester(object):
         environments = {
             "production": {
                 "endpoint": "https://mturk-requester.us-east-1.amazonaws.com",
-                "preview": "https://www.mturk.com/mturk/preview"
+                "preview": "https://www.mturk.com/mturk/preview",
             },
             "sandbox": {
-                "endpoint":
-                    "https://mturk-requester-sandbox.us-east-1.amazonaws.com",
-                "preview": "https://workersandbox.mturk.com/mturk/preview"
+                "endpoint": "https://mturk-requester-sandbox.us-east-1.amazonaws.com",
+                "preview": "https://workersandbox.mturk.com/mturk/preview",
             },
         }
 
         self.mturk_environment = environments["sandbox"] if self.use_sandbox else environments["production"]
         self.client = boto3.client(
-            service_name='mturk',
-            region_name='us-east-1',
-            endpoint_url=self.mturk_environment['endpoint'],
+            service_name="mturk",
+            region_name="us-east-1",
+            endpoint_url=self.mturk_environment["endpoint"],
             aws_access_key_id=mturk_creds["aws_access_key_id"],
-            aws_secret_access_key=mturk_creds["aws_secret_access_key"]
+            aws_secret_access_key=mturk_creds["aws_secret_access_key"],
         )
 
     def set_task_attributes(self, task_attributes):
@@ -90,8 +80,7 @@ class Requester(object):
         self.task_attributes = task_attributes
 
     def get_worker_requirements(self):
-        """Currently set for masters level.
-        """
+        """Currently set for masters level."""
         worker_requirements = []
         if not self.use_sandbox:
             # https://docs.aws.amazon.com/AWSMechTurk/latest/AWSMturkAPI/ApiReference_QualificationRequirementDataStructureArticle.html
@@ -113,15 +102,12 @@ class Requester(object):
             # )
             # masters qualification
             worker_requirements.append(
-                {
-                    "QualificationTypeId": "2F1QJWKUDD8XADTFD2Q0G6UTO95ALH",
-                    "Comparator": "Exists"
-                }
+                {"QualificationTypeId": "2F1QJWKUDD8XADTFD2Q0G6UTO95ALH", "Comparator": "Exists"}
             )
         return worker_requirements
 
     def show_account_balance(self):
-        print(self.client.get_account_balance()['AvailableBalance'])
+        print(self.client.get_account_balance()["AvailableBalance"])
 
     def submit_hit_with_external_url(self, external_url):
         if external_url in self.database[self.get_sandox_key()]:
@@ -130,21 +116,16 @@ class Requester(object):
             <ExternalQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2006-07-14/ExternalQuestion.xsd">
                <ExternalURL>{}</ExternalURL>
                <FrameHeight>1000</FrameHeight>
-            </ExternalQuestion>""".format(external_url)
+            </ExternalQuestion>""".format(
+            external_url
+        )
         response = self.client.create_hit(
-            **self.task_attributes,
-            Question=question_xml,
-            QualificationRequirements=self.worker_requirements
+            **self.task_attributes, Question=question_xml, QualificationRequirements=self.worker_requirements
         )
         hit_id = response["HIT"]["HITId"]
         # update database
         try:
-            info = {
-                "use_sandbox": self.use_sandbox,
-                "external_url": external_url,
-                "hit_id": hit_id,
-                "response": None
-            }
+            info = {"use_sandbox": self.use_sandbox, "external_url": external_url, "hit_id": hit_id, "response": None}
             # update database
             self.database[self.get_sandox_key()][hit_id] = info
         except:
@@ -166,8 +147,8 @@ class Requester(object):
 
     def get_url_to_view_hit(self, hit_id):
         response = self.client.get_hit(HITId=hit_id)
-        hit_type_id = response['HIT']['HITTypeId']
-        return self.mturk_environment['preview'] + "?groupId={}".format(hit_type_id)
+        hit_type_id = response["HIT"]["HITTypeId"]
+        return self.mturk_environment["preview"] + "?groupId={}".format(hit_type_id)
 
     def get_sandox_key(self):
         return "sandbox" if self.use_sandbox else "production"
@@ -190,10 +171,7 @@ class Requester(object):
             # only consider sandbox or non sandbox
             if self.database[self.get_sandox_key()][hit_id]["use_sandbox"] and not self.use_sandbox:
                 continue
-            assignments_list = self.client.list_assignments_for_hit(
-                HITId=hit_id,
-                MaxResults=100
-            )
+            assignments_list = self.client.list_assignments_for_hit(HITId=hit_id, MaxResults=100)
             if assignments_list["NumResults"] == 0:
                 print("No results.")
                 continue
@@ -205,9 +183,9 @@ class Requester(object):
             # assert assignments_list["NumResults"] == 3
             for idx in range(assignments_list["NumResults"]):
                 # print("something")
-                answer_dict = xmltodict.parse(assignments_list["Assignments"][idx]['Answer'])
+                answer_dict = xmltodict.parse(assignments_list["Assignments"][idx]["Answer"])
                 AssignmentId = assignments_list["Assignments"][idx]["AssignmentId"]
-                answer = answer_dict['QuestionFormAnswers']['Answer']["FreeText"]
+                answer = answer_dict["QuestionFormAnswers"]["Answer"]["FreeText"]
                 answer = json.loads(answer)
                 answer["AssignmentId"] = AssignmentId
                 answers.append(answer)
@@ -222,13 +200,14 @@ class Requester(object):
         return external_urls
 
     def save_mturk_parsed_results_to_file(self, response_list):
-        """Save the HIT to file.
-        """
+        """Save the HIT to file."""
         # TODO(ethan): need to update to support multiple assignments from "MaxAssignments"
-        for response in response_list:
-            filename = get_absolute_path(os.path.join("static/data/responses", response_list[0]["GLOBAL_CONFIG_NAME"] + ".json"))
-            make_dir(filename)
-            write_to_json(filename, response)
+        assert len(response_list) == 1
+        filename = get_absolute_path(
+            os.path.join("static/data/responses", response_list[0]["GLOBAL_CONFIG_NAME"] + ".json")
+        )
+        make_dir(filename)
+        write_to_json(filename, response_list[0])
 
     def save_all_responses_to_files(self, responses):
         for hit_id in tqdm(responses.keys()):
@@ -237,10 +216,12 @@ class Requester(object):
     def get_mean_time_from_resonses(self, responses):
         times = []
         for hit_id in responses:
-            t = responses[hit_id]["GLOBAL_REAL_TEST_TIME"]
-            times.append(t)
+            for i in range(len(responses[hit_id])):
+                t = float(responses[hit_id][i]["GLOBAL_REAL_TEST_TIME"])
+                times.append(t)
         times = np.array(times)
         return times.mean()
+
 
 # approve the hits
 # from tqdm import tqdm

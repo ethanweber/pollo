@@ -17,7 +17,7 @@ async function getConfigFromConfigTypeAndConfigName(config_type, config_name) {
 async function getResultsFromConfigTypeAndConfigName(config_type, config_name) {
     return new Promise(function(resolve, reject) {
         console.log(config_name);
-        let endpoint = "/get_responses" +
+        let endpoint = "/get_local_responses" +
             "/" + config_name;
         $.get(endpoint,
             function(data, textStatus, jqXHR) {
@@ -98,8 +98,10 @@ function getVideo(image_url) {
     video.src = image_url;
     video.setAttribute("controls", "controls");
     video.setAttribute("preload", "metadata");
-    // video.setAttribute("preload", "none");
     video.setAttribute("width", "100%");
+    // video.setAttribute("autoplay", "autoplay");  // Added for autoplay
+    // video.setAttribute("muted", "muted");        // Added to ensure autoplay works in most browsers
+    // video.setAttribute("loop", "loop");  // Added for looping the video
     container.appendChild(video);
     return container;
 }
