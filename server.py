@@ -46,8 +46,7 @@ app.jinja_env.filters['zip'] = zip
 
 @app.route('/', methods=["GET"])
 def root():
-    return "The server is working, but this endpoint isn't useful."
-
+    return "The server is working, but this endpoint isn't defined."
 
 @app.route('/mturk/externalSubmit', methods=["POST"])
 def submit_external_submit():

@@ -171,6 +171,38 @@ function getBiasganAnnotationAsDiv(example) {
     return annotationHTML
 }
 
+// Get the pickn annotation as a div.
+function getNerfillerPicknAnnotationAsDiv(example) {
+
+    let annotationHTML = document.createElement('div');
+    // annotationHTML.setAttribute("class", "PickNRow");
+
+    let video_to_inpaint = example.video_to_inpaint;
+
+    let shotchangeRow = document.createElement('div');
+    shotchangeRow.setAttribute("class", "PickNRow");
+    let imagehtml = getVideo(video_to_inpaint);
+    shotchangeRow.appendChild(imagehtml);
+    annotationHTML.appendChild(shotchangeRow);
+
+    let possibleChoicesRow = document.createElement('div');
+    possibleChoicesRow.setAttribute("class", "PickNRow");
+    let choices = example.choices;
+    for (let j = 0; j < choices.length; j++) {
+        let rowItem = document.createElement('div');
+        rowItem.setAttribute("class", "PickNRowItem");
+        let choice = choices[j];
+        rowItem.innerHTML = getVideo(choice).innerHTML;
+        rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
+        let width_perc = Math.floor((1.0 / choices.length) * 100.0);
+        rowItem.setAttribute("width", width_perc.toString() + "%");
+        possibleChoicesRow.appendChild(rowItem);
+    }
+    annotationHTML.appendChild(possibleChoicesRow);
+
+    return annotationHTML
+}
+
 // Get a random subarray of a list.
 // https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
 function getRandomSubarray(arr, size) {

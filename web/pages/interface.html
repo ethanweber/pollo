@@ -2,88 +2,89 @@
 <html>
 
 <head>
-    <title>Interface</title>
+  <title>Interface</title>
 
-    <!--    mturk stylesheet, but then override with custom things -->
-    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
+  <!--    mturk stylesheet, but then override with custom things -->
+  <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="/static/main.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
-    <link rel="shortcut icon" href="/static/favicon.png">
+  <link rel="shortcut icon" href="/static/favicon.png">
 
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 </head>
 
 <body>
 
-    <div class="panel panel-primary" id="Instructions" style="display:none;">
-        <div class="panel-heading"><strong>
-                <h2>Instructions</h2>
-            </strong></div>
-        <div class="panel panel-primary">
-            <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
-            </p>
-            <div id="IntructionsContent"></div>
-            <p align="center">
-                <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px" type="button" value="Proceed" disabled="disabled" />
-            </p>
-        </div>
+  <div class="panel panel-primary" id="Instructions" style="display:none;">
+    <div class="panel-heading"><strong>
+        <h2>Instructions</h2>
+      </strong></div>
+    <div class="panel panel-primary">
+      <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
+      </p>
+      <div id="IntructionsContent"></div>
+      <p align="center">
+        <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px"
+          type="button" value="Proceed" disabled="disabled" />
+      </p>
     </div>
+  </div>
 
-    <div class="panel panel-primary" id="AnnotationTestStart" style="display:none;">
-        <div class="panel-heading"><strong>
-                <h2>Main Task</h2>
-            </strong></div>
+  <div class="panel panel-primary" id="AnnotationTestStart" style="display:none;">
+    <div class="panel-heading"><strong>
+        <h2>Main Task</h2>
+      </strong></div>
 
-        <div class="panel-body">
-            <div id="AnnotationTestStartContent"></div>
+    <div class="panel-body">
+      <div id="AnnotationTestStartContent"></div>
 
-            <p align="center">
-                <input id="GoToAnnotationTestButton" onclick="goToPage('AnnotationTest')"
-                    style="height:50px;width:100px" type="button" value="Start!" />
-            </p>
-        </div>
+      <p align="center">
+        <input id="GoToAnnotationTestButton" onclick="goToPage('AnnotationTest')" style="height:50px;width:100px"
+          type="button" value="Start!" />
+      </p>
     </div>
-    <div class="panel panel-primary" id="AnnotationTest" style="display:none;">
-        <div class="panel-heading" id="AnnotationTestHeader"><strong>
-                <!-- <h2>For the person in the GREEN BOX, which 3D visualization corresponds to where they are in the room?</h2> -->
-                <h2><span id="task_question"></span></h2>
-            </strong></div>
-        <div id=AnnotationTestMessage"></div>
-        <div id="AnnotationTestQuestionsDiv"></div>
-        <h2 align="center" id="AnnotationTestImageCount">0/50 change this</h2>
-    </div>
+  </div>
+  <div class="panel panel-primary" id="AnnotationTest" style="display:none;">
+    <div class="panel-heading" id="AnnotationTestHeader"><strong>
+        <!-- <h2>For the person in the GREEN BOX, which 3D visualization corresponds to where they are in the room?</h2> -->
+        <h2><span id="task_question"></span></h2>
+      </strong></div>
+    <div id=AnnotationTestMessage"></div>
+    <div id="AnnotationTestQuestionsDiv"></div>
+    <h2 align="center" id="AnnotationTestImageCount">0/50 change this</h2>
+  </div>
 
-    <div class="panel panel-primary" id="Finish" style="display:none;">
-        <div class="panel-heading"><strong>
-                <h2 id="FinishHeading"></h2>
-            </strong></div>
-        <div class="panel-body">
-            <div id="FinishText"></div>
-            <p>Thank you.</p>
-        </div>
-        <!--<form id='submitid' action='aux_url' method='post' style="display:none;">-->
-        <form id='submitid' action='aux_url' method='post'>
-            <p align="center">
-                <input type="button" id="submitButton" value="Submit" autocomplete="off" disabled="disabled"
-                    onClick="attemptSubmit()" style="height:40px;width:400px" value="Submit" />
-            </p>
-            <!-- <input type="hidden" name="global_config" id="global_config" value="" autocomplete="off" /> -->
-            <input type="hidden" name="answer" id="answer" value="" autocomplete="off" />
-            <input type="hidden" name="assignmentId" id="assignment" value="" autocomplete="off" />
-        </form>
+  <div class="panel panel-primary" id="Finish" style="display:none;">
+    <div class="panel-heading"><strong>
+        <h2 id="FinishHeading"></h2>
+      </strong></div>
+    <div class="panel-body">
+      <div id="FinishText"></div>
+      <p>Thank you.</p>
     </div>
+    <!--<form id='submitid' action='aux_url' method='post' style="display:none;">-->
+    <form id='submitid' action='aux_url' method='post'>
+      <p align="center">
+        <input type="button" id="submitButton" value="Submit" autocomplete="off" disabled="disabled"
+          onClick="attemptSubmit()" style="height:40px;width:400px" value="Submit" />
+      </p>
+      <!-- <input type="hidden" name="global_config" id="global_config" value="" autocomplete="off" /> -->
+      <input type="hidden" name="answer" id="answer" value="" autocomplete="off" />
+      <input type="hidden" name="assignmentId" id="assignment" value="" autocomplete="off" />
+    </form>
+  </div>
 
 </body>
 
 <script>
-    // set config to dynamically load the page, based on the mturk task
-    var GLOBAL_CONFIG_TYPE = "${CONFIG_TYPE}";
-    var GLOBAL_CONFIG_NAME = "${CONFIG_NAME}";
+  // set config to dynamically load the page, based on the mturk task
+  var GLOBAL_CONFIG_TYPE = "${CONFIG_TYPE}";
+  var GLOBAL_CONFIG_NAME = "${CONFIG_NAME}";
 </script>
 
 <script type="text/javascript" src="/static/utils.js"></script>
@@ -92,167 +93,212 @@
 
 <!--keep content for the page down here-->
 <div id="picknInstructionsContent" style="display: none;">
-    <p>
-        In this job, you are asked to select which of the two people is in a more realistic position.
-    </p>
-    <p>
-        Each question consists of two rows.
-        The <b>top row</b> shows two images from a popular TV show, where the person of interest is marked with a colored box.
-        The <b>bottom row</b> shows two videos of your possible answers: 0 or 1.
-    </p>
-    <p><b>Your task is to choose the video where the person is in a better location.</b></p>
-    <p>Press play on the videos to inform your response, and then choose your selection by clicking on the number below.</p>
-    <p><b><i>
-        The estimated time for this HIT is less than 10 minutes. Please be consistent in your responses, or otherwise the HIT will not be accepted. Thank you.
-    </i></b></p>
-    <h3>Examples</h3>
-    <p>Click to play the videos.</p>
-    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
+  <p>
+    In this job, you are asked to select which of the two people is in a more realistic position.
+  </p>
+  <p>
+    Each question consists of two rows.
+    The <b>top row</b> shows two images from a popular TV show, where the person of interest is marked with a colored
+    box.
+    The <b>bottom row</b> shows two videos of your possible answers: 0 or 1.
+  </p>
+  <p><b>Your task is to choose the video where the person is in a better location.</b></p>
+  <p>Press play on the videos to inform your response, and then choose your selection by clicking on the number below.
+  </p>
+  <p><b><i>
+        The estimated time for this HIT is less than 10 minutes. Please be consistent in your responses, or otherwise
+        the HIT will not be accepted. Thank you.
+      </i></b></p>
+  <h3>Examples</h3>
+  <p>Click to play the videos.</p>
+  <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+  <div id="PicknExamples"></div>
 </div>
 
 <div id="ExampleTemplate" style="display: none;">
-    <div class="ExampleTemplateClass1"></div>
-    <div align="center" class="ExampleTemplateContent1"></div>
-    <div class="ExampleTemplateText1"></div>
+  <div class="ExampleTemplateClass1"></div>
+  <div align="center" class="ExampleTemplateContent1"></div>
+  <div class="ExampleTemplateText1"></div>
 </div>
 
 <div id="PicknQuestionTemplate" style="display: none;">
-    <div align="center" class="PicknQuestionImage"></div>
-    <div class="PicknConfirmMoveOn">
-        <p align="center">
-            <input class="proceedToNextQuestionClass" onclick="picknProceedToNextQuestion()" style="height:50px;width:75%"
-                type="button" disabled="disabled" value="Proceed to next question" />
-        </p>
-    </div>
+  <div align="center" class="PicknQuestionImage"></div>
+  <div class="PicknConfirmMoveOn">
+    <p align="center">
+      <input class="proceedToNextQuestionClass" onclick="picknProceedToNextQuestion()" style="height:50px;width:75%"
+        type="button" disabled="disabled" value="Proceed to next question" />
+    </p>
+  </div>
 </div>
 
 
 <!-- friends -->
 <div class="panel panel-primary" id="picknRealTaskTemplate" style="display:none;">
-    <p>You will be asked to answer to <span id="picknRealTaskTemplateClassNumImages"></span> examples
-        sequentially.</p>
+  <p>You will be asked to answer to <span id="picknRealTaskTemplateClassNumImages"></span> examples
+    sequentially.</p>
 
-    <p>You are expected to take up to <strong><span id="expected_seconds_per_query_example"></span></strong> seconds per example.</p>
+  <p>You are expected to take up to <strong><span id="expected_seconds_per_query_example"></span></strong> seconds per
+    example.</p>
 
-    <p>Please <strong>do not</strong> take any breaks in the middle of the task.</p>
+  <p>Please <strong>do not</strong> take any breaks in the middle of the task.</p>
 
-    <p><b><i>
+  <p><b><i>
         However, do not worry and do not rush.
         It is more important to do the task right and have high quality responses.
         For this reason, we will monitor your time, accuracy, and consistency during the task.
-        Failing to have high accuracy and consistency will not let you submit this HIT, and as a result you will not be paid.
+        Failing to have high accuracy and consistency will not let you submit this HIT, and as a result you will not be
+        paid.
         We thank you for your help.
-    </i></b></p>
+      </i></b></p>
 </div>
 
 <!-- biasgan -->
-<div id="biasgan_tasks" style="display:none;">
+<!-- <div id="biasgan_tasks" style="display:none;"> -->
 
-<div id="Task1_Race_Classification">
-<p>Read the task carefully and inspect the image.</p>
-<p>Instructions: Identify the race of the person(s) in the image, by selecting one of the options described below.</p>
-<p>Description of the options:</p>
-<p>1) Black - This is an image of a black person. </p>
-<p>2) White - This is an image of a white person. </p>
-<p>3) Non-black/white - I know the race of the person and the person is not black or white. </p>
-<p>4) Cannot Determine - I cannot tell the race of the person. </p>
-<p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the worker not being paid and their data being excluded from our study cases.</p>
-<h3>Examples</h3>
-<p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-<div id="PicknExamples"></div>
-</div>
+  <!-- <div id="Task1_Race_Classification">
+    <p>Read the task carefully and inspect the image.</p>
+    <p>Instructions: Identify the race of the person(s) in the image, by selecting one of the options described below.
+    </p>
+    <p>Description of the options:</p>
+    <p>1) Black - This is an image of a black person. </p>
+    <p>2) White - This is an image of a white person. </p>
+    <p>3) Non-black/white - I know the race of the person and the person is not black or white. </p>
+    <p>4) Cannot Determine - I cannot tell the race of the person. </p>
+    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
+      worker not being paid and their data being excluded from our study cases.</p>
+    <h3>Examples</h3>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples"></div>
+  </div> -->
 
-<div id="Task2_Real_Fake_Classification">
-<p>Instructions: Identify real photographs and fake images by selecting on of the options described below. Real photographs are images of real person(s) captured using a camera and fake images are computer generated images of a person(s) who do not exist.</p>
-<p>Description of the options:</p>
-<p> 1) Real Photograph - This is an photograph of a real person taken using a camera.</p>
-<p> 2) Fake/Manipulated Image - This is a computer generated image of a person(s) who do not exist.</p>
-<p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured facial features, or warped background.
-Note that these are not all the possible examples of what a fake image can look like.</p>
-<p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the worker not being paid and their data being excluded from our study cases.</p>
-<h3>Examples</h3>
-<p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-<div id="PicknExamples"></div>
-</div>
+  <!-- <div id="Task2_Real_Fake_Classification">
+    <p>Instructions: Identify real photographs and fake images by selecting on of the options described below. Real
+      photographs are images of real person(s) captured using a camera and fake images are computer generated images of
+      a person(s) who do not exist.</p>
+    <p>Description of the options:</p>
+    <p> 1) Real Photograph - This is an photograph of a real person taken using a camera.</p>
+    <p> 2) Fake/Manipulated Image - This is a computer generated image of a person(s) who do not exist.</p>
+    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
+      facial features, or warped background.
+      Note that these are not all the possible examples of what a fake image can look like.</p>
+    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
+      worker not being paid and their data being excluded from our study cases.</p>
+    <h3>Examples</h3>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples"></div>
+  </div> -->
 
-<div id="Task3_Quality_Ranking">
-    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake images are computer generated images of a person(s) who do not exist.</p>
-    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured facial features, or a warped background.
-        Note that these are not all the possible examples of what a fake image can look like.</p> 
+  <!-- <div id="Task3_Quality_Ranking">
+    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake
+      images are computer generated images of a person(s) who do not exist.</p>
+    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
+      facial features, or a warped background.
+      Note that these are not all the possible examples of what a fake image can look like.</p>
     <p>Description of the options:</p>
     <p> 1) Image A - Image A is more likely to be a fake image.</p>
     <p> 2) Image B - Image B is more likely to be a fake image.</p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the worker not being paid and their data being excluded from our study cases.</p>
+    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
+      worker not being paid and their data being excluded from our study cases.</p>
     <h2>Examples of Real Photographs:</h2>
-  <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3" style="width:100%">
-      </div>
-    </div>
-  <h2>Examples of Fake Images:</h2>
     <div class="row">
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1"
+          style="width:100%">
       </div>
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2"
+          style="width:100%">
       </div>
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3"
+          style="width:100%">
+      </div>
+    </div>
+    <h2>Examples of Fake Images:</h2>
+    <div class="row">
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1"
+          style="width:100%">
+      </div>
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2"
+          style="width:100%">
+      </div>
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3"
+          style="width:100%">
       </div>
     </div>
 
-<h3>Examples</h3>
-<p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-<div id="PicknExamples"></div>
-</div>
+    <h3>Examples</h3>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples"></div>
+  </div> -->
 
 
-<div id="Task4_Quality_Ranking">
-    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake images are computer generated images of a person(s) who do not exist.</p>
-    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured facial features, or a warped background.
-        Note that these are not all the possible examples of what a fake image can look like.</p> 
+  <!-- <div id="Task4_Quality_Ranking">
+    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake
+      images are computer generated images of a person(s) who do not exist.</p>
+    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
+      facial features, or a warped background.
+      Note that these are not all the possible examples of what a fake image can look like.</p>
     <p>Description of the options:</p>
     <p> 1) Image A - Image A is more likely to be a fake image.</p>
     <p> 2) Image B - Image B is more likely to be a fake image.</p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the worker not being paid and their data being excluded from our study cases.</p>
+    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
+      worker not being paid and their data being excluded from our study cases.</p>
     <h2>Examples of Real Photographs:</h2>
-  <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3" style="width:100%">
-      </div>
-    </div>
-  <h2>Examples of Fake Images:</h2>
     <div class="row">
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1"
+          style="width:100%">
       </div>
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2"
+          style="width:100%">
       </div>
       <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3" style="width:100%">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3"
+          style="width:100%">
       </div>
     </div>
-    
-  <h3>Examples</h3>
-  <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-  <div id="PicknExamples"></div>
+    <h2>Examples of Fake Images:</h2>
+    <div class="row">
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1"
+          style="width:100%">
+      </div>
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2"
+          style="width:100%">
+      </div>
+      <div class="column">
+        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3"
+          style="width:100%">
+      </div>
+    </div>
+
+    <h3>Examples</h3>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples"></div>
   </div>
+</div> -->
 
+<!-- nerfiller -->
+<div id="nerfiller_tasks" style="display:none;">
+  <div id="Nerfiller_User_Study">
+    <p>Instructions: Given two videos and a reference video above, identify which video does a better job at completing the missing content in pink.
+    <p></p>
+    <p>Description of the options:</p>
+    <ul>
+        <li><strong>Image 0</strong>: The first option does a better job at completing the pink region, and the video looks better.</li>
+        <li><strong>Image 1</strong>: The first option does a better job at completing the pink region, and the video looks better.</li>
+    </ul>
+    <p>There are quality checks and failure to be consistent in your responses will lead to the worker not being paid and their data be excluded from our study cases.</p>
+    <h3>Examples that you'll encounter with recommended responses</h3>
+    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
+    <div id="PicknExamples"></div>
+  </div>
 </div>
 
 </html>

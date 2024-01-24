@@ -42,7 +42,7 @@ conda activate anno
 Install the repo as a Python package. This will also install the dependencies.
 
 ```bash
-python setup.py develop
+pip install -e .
 ```
 
 ### Setup data
@@ -67,7 +67,7 @@ pages/img_classify.html and static/img_classify/ aren't very well integrated int
 Go to [REVERSE_PROXY.md](REVERSE_PROXY.md) for details!
 
 # go to the url
-https://myurl.mydomain/mturk/<hit_name>
+https://myurl.mydomain/interface/<hit_name>
 
 # or, after the responses are in from mturk
 https://myurl.mydomain/responses/<hit_name>
