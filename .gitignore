@@ -6,3 +6,5 @@ mturk_*.json
 mturk_*.pkl
 *egg-info/
 __MACOSX/
+PyPI_pollotoken.txt
+dist
