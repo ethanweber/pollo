@@ -5,7 +5,7 @@ NOTE: this code requires extra data from the 'friends' project to run.
 import os
 import random
 
-from anno.hit_makers.base import HitMaker
+from pollo.hit_makers.base import HitMaker
 
 
 class FriendsHitMaker(HitMaker):

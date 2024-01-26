@@ -1,7 +1,7 @@
 import os
 
 from os.path import join as pjoin
-import anno.utils.io as io_utils
+import pollo.utils.io as io_utils
 
 
 class HitMaker:
@@ -13,7 +13,7 @@ class HitMaker:
                  expected_seconds_per_query_example=10,
                  image_height=300,
                  image_max_width=500,
-                 endpoint="https://anno.ethanweber.me"):
+                 endpoint="https://pollo.ethanweber.me"):
         self.min_seconds_per_query_example = min_seconds_per_query_example
         self.expected_seconds_per_query_example = expected_seconds_per_query_example
         self.image_height = image_height

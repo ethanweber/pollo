@@ -7,7 +7,7 @@ import boto3
 import numpy as np
 import xmltodict
 from tqdm import tqdm
-from anno.utils.io import get_absolute_path, make_dir, write_to_json
+from pollo.utils.io import get_absolute_path, make_dir, write_to_json
 
 PUBLIC_URL = "https://friends.ethanweber.me"
 

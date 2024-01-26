@@ -4,10 +4,10 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-from anno.hit_makers.base import HitMaker
+from pollo.hit_makers.base import HitMaker
 
 from os.path import join as pjoin
-from anno.utils import io as io_utils
+from pollo.utils import io as io_utils
 
 
 class BiasganHitMaker(HitMaker):

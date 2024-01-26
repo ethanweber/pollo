@@ -1,4 +1,4 @@
-# Anno: A codebase for computer vision Amazon MTurk Annotation (AMT) tasks
+# Pollo: a tool for crowd-sourced poll-ing
 
 > This repo is a compilation of code for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
 
@@ -17,7 +17,7 @@ The main idea for this repo is to specify a JSON file descripting each HIT (Huma
         |-responses/
             |-<hit_name>.json
         |-media/ # here you can store images or videos
-|-anno/hit_makers/
+|-pollo/hit_makers/
     |-hit_maker.py
     |-biasgan_hit_maker.py
 
@@ -31,13 +31,6 @@ The main idea for this repo is to specify a JSON file descripting each HIT (Huma
 ```
 
 ### Getting started
-
-Create a conda environment
-
-```bash
-conda create --name anno python=3.8.13
-conda activate anno
-```
 
 Install the repo as a Python package. This will also install the dependencies.
 

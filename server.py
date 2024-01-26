@@ -15,7 +15,7 @@ import string
 import random
 from os.path import join as pjoin
 
-from anno.utils.io import make_dir, load_from_json, write_to_json
+from pollo.utils.io import make_dir, load_from_json, write_to_json
 
 parser = argparse.ArgumentParser(description="")
 parser.add_argument("--port", type=int, default=8893, help="Port to run on")
