@@ -7,3 +7,4 @@ mturk_database.pkl
 __MACOSX/
 PyPI_pollotoken.txt
 dist
+docs/_build/
