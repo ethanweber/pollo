@@ -72,7 +72,7 @@ https://myurl.mydomain/hits/<hit_name>
 # an interface showing the responses to a hit
 https://myurl.mydomain/responses/<hit_name>
 
-# same, but for locally saved hits
+# an interface showing the local responses to a hit
 https://myurl.mydomain/local_responses/<hit_name>
 
 # a file tree
