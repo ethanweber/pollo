@@ -1,8 +1,8 @@
 .ipynb_checkpoints/
 __pycache__/
 old
-mturk_*.json
-mturk_*.pkl
+mturk_creds.json
+mturk_database.pkl
 *egg-info/
 __MACOSX/
 PyPI_pollotoken.txt
