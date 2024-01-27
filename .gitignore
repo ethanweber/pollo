@@ -1,7 +1,6 @@
 .ipynb_checkpoints/
 __pycache__/
 old
-static/data
 mturk_*.json
 mturk_*.pkl
 *egg-info/

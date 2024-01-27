@@ -1,73 +1,58 @@
-# Pollo: a tool for crowd-sourced poll-ing
+# 🐥 Pollo: a tool for crowd-sourced polling
 
-> This repo is a compilation of code for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). I'll try to update this more comprehensively over time for others to benefit from. Contact `ethanweber@berkeley.edu` if you have questions.
+This repo is for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). The main idea for this repo is to specify a JSON file describing each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task. A notebook lets you create and manage your HITs.
 
-The main idea for this repo is to specify a JSON file descripting each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task.
+# Getting started
 
-### Folder structure
-
-```
-|-pages/
-    |-hits.html
-    |-responses.html
-|-static/
-    |-data/
-        |-hits/
-            |-<hit_name>.json
-        |-responses/
-            |-<hit_name>.json
-        |-media/ # here you can store images or videos
-|-pollo/hit_makers/
-    |-hit_maker.py
-    |-biasgan_hit_maker.py
-
-|-requester.ipynb # main file for creating hits, sending hits, and saving hits
-
-|-requester.py
-|-server.py
-
-|-mturk_creds.json
-|-mturk_database.pkl
-```
-
-### Getting started
-
-Install the repo as a Python package. This will also install the dependencies.
+Install the repo as a package.
 
 ```bash
+pip install pollo
+```
+
+If you want the latest version, you can clone and install in editable mode.
+
+```bash
+git clone https://github.com/ethanweber/pollo.git
+cd pollo
 pip install -e .
 ```
 
-### Setup data
+# Your first project
 
-First, you need to add data to the `static/data/` folder, as specified above.
+The quickest way to understand this code it to look at our example. Here are the steps!
 
-For media, this might be a symbolic link.
+1. Start the server.
+
+    ```bash
+    cd example_project
+    python -m pollo.server
+    ```
+
+2. Open the [example_project/requester.ipynb](example_project/requester.ipynb) file and step through it.
+
+# Folder structure
+
+Here is what a project folder structure looks like.
 
 ```
-cd static/data/media
-ln -l /path/to/images images
+example-project/
+├── data/
+│   ├── hits/
+│   │   └── <hit_name>.json          # HIT (Human Intelligence Task) data
+│   ├── responses/
+│   │   └── <hit_name>.json          # Responses to HITs
+│   ├── local_responses/
+│   │   └── <hit_name>.json          # Local responses to HITs
+│   └── media/                       # Media assets like images or videos
+│       ├── images/
+│       └── videos/
+├── requester.ipynb                  # Main notebook for HITs management
+├── mturk_creds.json                 # AWS Mechanical Turk credentials
+└── mturk_database.pkl               # Database for tracking HITs
 ```
 
-When referencing an asset in the static folder, e.g., an image, you can use the `path` that starts after "static".
-E.g., "data/media/images/<>"
-
-Note:
-pages/img_classify.html and static/img_classify/ aren't very well integrated into the MTURK pipeline yet.
-
-### Server configuration
-
-Go to [REVERSE_PROXY.md](REVERSE_PROXY.md) for details!
-
-# go to the url
-https://myurl.mydomain/interface/<hit_name>
-
-# or, after the responses are in from mturk
-https://myurl.mydomain/responses/<hit_name>
-
-### MTurk credentials
-
-Setup MTurk credentials. Create a file named "mturk_creds.json" and place it in the root directory of this repo. It should have the following content.
+Place MTurk credentials in a file named "mturk_creds.json". It should have the following content.
 
 ```json
 {
@@ -76,11 +61,29 @@ Setup MTurk credentials. Create a file named "mturk_creds.json" and place it in 
 }
 ```
 
-### Projects that used this code
+# Server details
+
+You need to host your server with an HTTPS domain to be compatible with AMT. Go to [REVERSE_PROXY.md](REVERSE_PROXY.md) for details on how to set this up. After this, you should be able to navigate to the following URLs.
+
+```bash
+# an interface to ask the hit questions
+https://myurl.mydomain/hits/<hit_name>
+
+# an interface showing the responses to a hit
+https://myurl.mydomain/responses/<hit_name>
+
+# same, but for locally saved hits
+https://myurl.mydomain/local_responses/<hit_name>
+
+# a file tree
+https://myurl.mydomain/media/
+```
+
+# Projects that used our code
 
 Here are some projects that have used this code (or versions of it). The code presented in this repo is a general implementation for qualitative user studies. However, it was and can be modified for more specific use cases.
 
-- [Studying Bias in GANs through the Lens of Race (BiasGAN)](https://neerja.me/bias-gans/)
-    - In this paper, there were three tasks for comparing images.
-- [Sitcoms3D](https://ethanweber.me/sitcoms3D/) - In this paper, the task was a qualitative user study comparing two videos against one another. The user was instructed to select which video looked more realistic.
-- [Learning2Listen](https://evonneng.github.io/learning2listen/)
+- [Scaling up instance annotation via label propagation](http://scaling-anno.csail.mit.edu/), ICCV 2021
+- [Learning2Listen](https://evonneng.github.io/learning2listen/), CVPR 2022
+- [Studying Bias in GANs through the Lens of Race (BiasGAN)](https://neerja.me/bias-gans/), ECCV 2022
+- [Sitcoms3D](https://ethanweber.me/sitcoms3D/), ECCV 2022
