@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pollo"
-version = "0.0.0"
+version = "0.0.1"
 description = "A repo for qualitative user studies using Amazon Mechanical Turk (AMT)."
 requires-python = ">=3.6"
 classifiers = [
@@ -21,6 +21,9 @@ dependencies = [
     "tqdm",
     "xmltodict"
 ]
+
+[project.urls]
+"GitHub" = "https://github.com/ethanweber/pollo"
 
 [tool.setuptools.packages.find]
 include = ["pollo"]
