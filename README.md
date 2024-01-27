@@ -4,7 +4,7 @@ This repo is for AMT annotation tasks for computer vision purposes (e.g., qualit
 
 # Getting started
 
-Install the repo as a package.
+Install the repo as a package
 
 ```bash
 pip install pollo
