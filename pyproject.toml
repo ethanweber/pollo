@@ -17,6 +17,7 @@ dependencies = [
     "flask>=3.0.1",
     "mediapy",
     "pandas",
+    "pyngrok>=5.1.0",
     "requests",
     "tqdm",
     "xmltodict"
@@ -27,3 +28,6 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 include = ["pollo"]
+
+[project.scripts]
+pollo-server = "pollo.server:main"

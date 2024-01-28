@@ -9,7 +9,9 @@ import os
 import pprint
 import random
 import string
+import threading
 
+from pyngrok import ngrok
 from flask import Flask, jsonify, request, send_from_directory
 
 from pollo.utils.io import load_from_json, write_to_json
@@ -114,7 +116,12 @@ class EndpointHandler:
             return modified_html
 
 
-if __name__ == "__main__":
+def run_flask(app, port):
+    app.run(debug=False, threaded=True, host="0.0.0.0", port=port)
+
+
+def main():
+    """Main function."""
     print("running server")
     args = parser.parse_args()
 
@@ -133,4 +140,13 @@ if __name__ == "__main__":
         pages_folder=pages_folder,
     )
 
-    app.run(debug=False, threaded=True, host="0.0.0.0", port=args.port)
+    # Start Flask in a separate thread
+    flask_thread = threading.Thread(target=run_flask, args=(app, args.port))
+    flask_thread.start()
+
+    # Then start Ngrok when Flask is running
+    tunnel = ngrok.connect(args.port)
+    print("Ngrok Tunnel:", tunnel)
+
+if __name__ == "__main__":
+    main()

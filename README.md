@@ -26,7 +26,7 @@ The quickest way to understand this code it to look at our example. Here are the
 
     ```bash
     cd example_project
-    python -m pollo.server
+    pollo-server
     ```
 
 2. Open the [examples/image_project/requester.ipynb](examples/image_project/requester.ipynb) file and step through it.
