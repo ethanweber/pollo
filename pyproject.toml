@@ -23,6 +23,13 @@ dependencies = [
     "xmltodict"
 ]
 
+[project.optional-dependencies]
+docs = [
+    "furo>=2022.09.29",
+    "myst-nb>=0.16.0",
+    "sphinx>=5.2.1",
+]
+
 [project.urls]
 "GitHub" = "https://github.com/ethanweber/pollo"
 

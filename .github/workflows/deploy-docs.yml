@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -e .
-        pip install sphinx furo  # Install Sphinx and the Furo theme
+        pip install -e .[docs]
 
     - name: Build documentation
       run: |
