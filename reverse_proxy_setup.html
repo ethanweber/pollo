@@ -2,10 +2,12 @@
 <html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Pollo" href="index.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 --><title>Index - Pollo</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Reverse Proxy Setup - Pollo</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
@@ -133,7 +135,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -154,8 +156,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reverse_proxy_setup.html">Reverse Proxy Setup</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Reverse Proxy Setup</a></li>
 </ul>
 
 </div>
@@ -175,7 +177,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -183,16 +186,67 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          
-<section class="genindex-section">
-  <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"></div>
+          <section id="reverse-proxy-setup">
+<h1>Reverse Proxy Setup<a class="headerlink" href="#reverse-proxy-setup" title="Link to this heading">#</a></h1>
+<p>Odds are you don’t have a public IP address where you can use SSL/HTTPS to host your MTurk tasks. In this case, you can leverage a Google VM or publically accessible machine and following the instructions here to use a reverse proxy.</p>
+<p>First you must create a VM and login to it. It should be accessible via a public IP address!</p>
+<p>Next, install the nginx web server. I’ve included <code class="docutils literal notranslate"><span class="pre">sudo</span></code> in front of these commands due to default Google VM privileges.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>nginx
+sudo<span class="w"> </span>unlink<span class="w"> </span>/etc/nginx/sites-enabled/default
+</pre></div>
+</div>
+<p>Create the config file that we need to edit. Notice that the <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">777</span></code> command is so I can remote ssh with VS Code into the VM and make my changes there with full privileges to edit that file. :)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>touch<span class="w"> </span>/etc/nginx/sites-available/reverse-proxy.conf
+sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>/etc/nginx/sites-available/reverse-proxy.conf
+sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/reverse-proxy.conf<span class="w"> </span>/etc/nginx/sites-enabled/reverse-proxy.conf
+</pre></div>
+</div>
+<p>Edit that file! Use <code class="docutils literal notranslate"><span class="pre">vim</span> <span class="pre">/etc/nginx/sites-available/reverse-proxy.conf</span></code>. Notice that <code class="docutils literal notranslate"><span class="pre">mturk.ethanweber.me</span></code> is the domain that I want to use when accessing the content at the port <code class="docutils literal notranslate"><span class="pre">8000</span></code>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>server {
+  server_name mturk.ethanweber.me;
+  location / {
+    proxy_pass http://127.0.0.1:8000/;
+  }
+}
+</pre></div>
+</div>
+<p>Certbot is needed to setup the <code class="docutils literal notranslate"><span class="pre">mturk.ethanweber.me</span></code> domain. Install it with the following commands!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>software-properties-common
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:certbot/certbot
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>python3-certbot-nginx
+</pre></div>
+</div>
+<p>Before proceeding, you need to setup an A Record that points the domain to your public VM IP address! I use Namecheap for this, but any domain provider should work. Follow the steps with the next command to get things working.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx
+</pre></div>
+</div>
+<p>You can verify that everything works by creating an html file and spinning up a server with python!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s1">&#39;hello mturk world&#39;</span> <span class="o">&gt;&gt;</span> <span class="n">index</span><span class="o">.</span><span class="n">html</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">http</span><span class="o">.</span><span class="n">server</span> <span class="mi">8000</span>
+</pre></div>
+</div>
+<p>If you can see the webpage, you are good to go. Now you can do something like ssh into a remote machine <strong>from the VM</strong> and forward a port <strong>from the ssh’d machine to the VM</strong>, which you can then see with HTTPS/SSL. Yay! Now go back to the other instructions to get your MTurk server running with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">server.py</span></code>. 😎</p>
+<p>If you make any changes to the <code class="docutils literal notranslate"><span class="pre">/etc/nginx/sites-available/reverse-proxy.conf</span></code> file, then run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">reload</span> <span class="pre">nginx</span></code> to reload nginx. Otherwise your changes won’t be reflected. This is important if you, per say, need to change a port!</p>
+<p>One last thing – on your local machine, you likely need to add the following to your ssh config file so that you can ssh from your VM to your computer with the python server (probably your research cluster).</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  ForwardAgent yes
+</pre></div>
+</div>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<p>Most of these instructions come from <a class="reference external" href="https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/">https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/</a>.</p>
+</section>
 </section>
 
         </article>
@@ -201,7 +255,17 @@
         
         <div class="related-pages">
           
-          
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -220,8 +284,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Reverse Proxy Setup</a><ul>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

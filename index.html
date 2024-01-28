@@ -3,12 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Reverse Proxy Setup" href="reverse_proxy_setup.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>pollo documentation</title>
+        <title>Pollo</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">pollo  documentation</div></a>
+      <a href="#"><div class="brand">Pollo</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -146,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">pollo  documentation</span>
+  <span class="sidebar-brand-text">Pollo</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -154,7 +155,11 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reverse_proxy_setup.html">Reverse Proxy Setup</a></li>
+</ul>
+
 </div>
 </div>
 
@@ -187,18 +192,93 @@
           </label>
         </div>
         <article role="main">
-          <section id="welcome-to-pollo-s-documentation">
-<h1>Welcome to pollo’s documentation!<a class="headerlink" href="#welcome-to-pollo-s-documentation" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+          <section id="pollo">
+<h1>Pollo<a class="headerlink" href="#pollo" title="Link to this heading">#</a></h1>
+<p>Pollo is repo is for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). The main idea for this repo is to specify a JSON file describing each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task. A notebook lets you create and manage your HITs.</p>
+</section>
+<section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
+<p>Install the repo as a package</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pollo
+</pre></div>
+</div>
+<p>If you want the latest version, you can clone and install in editable mode.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ethanweber/pollo.git
+<span class="nb">cd</span><span class="w"> </span>pollo
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
 </div>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">#</a></h1>
+<section id="your-first-project">
+<h1>Your first project<a class="headerlink" href="#your-first-project" title="Link to this heading">#</a></h1>
+<p>The quickest way to understand this code it to look at our example. Here are the steps!</p>
+<ol class="arabic">
+<li><p>Start the server.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>example_project
+pollo-server
+</pre></div>
+</div>
+</li>
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">examples/image_project/requester.ipynb</span></code> file and step through it.</p></li>
+</ol>
+</section>
+<section id="folder-structure">
+<h1>Folder structure<a class="headerlink" href="#folder-structure" title="Link to this heading">#</a></h1>
+<p>Here is what a project folder structure looks like.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>example-project/
+├── data/
+│   ├── hits/
+│   │   └── &lt;hit_name&gt;.json          # HIT (Human Intelligence Task) data
+│   ├── responses/
+│   │   └── &lt;hit_name&gt;.json          # Responses to HITs
+│   ├── local_responses/
+│   │   └── &lt;hit_name&gt;.json          # Local responses to HITs
+│   └── media/                       # Media assets like images or videos
+│       ├── images/
+│       └── videos/
+├── requester.ipynb                  # Main notebook for HITs management
+├── mturk_creds.json                 # AWS Mechanical Turk credentials
+└── mturk_database.pkl               # Database for tracking HITs
+</pre></div>
+</div>
+<p>Place MTurk credentials in a file named “mturk_creds.json”. It should have the following content.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;aws_access_key_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;aws_access_key_id&gt;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;aws_secret_access_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;aws_secret_access_key&gt;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="server-details">
+<h1>Server details<a class="headerlink" href="#server-details" title="Link to this heading">#</a></h1>
+<p>You need to host your server with an HTTPS domain to be compatible with AMT. Go to our reverse proxy docs for details on how to set this up. After this, you should be able to navigate to the following URLs.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># an interface to ask the hit questions</span>
+https://myurl.mydomain/hits-interface/&lt;hit_name&gt;
+
+<span class="c1"># an interface showing the responses to a hit</span>
+https://myurl.mydomain/responses-interface/&lt;hit_name&gt;
+
+<span class="c1"># an interface showing the local responses to a hit</span>
+https://myurl.mydomain/local_responses-interface/&lt;hit_name&gt;
+
+<span class="c1"># a file tree</span>
+https://myurl.mydomain/media/
+</pre></div>
+</div>
+</section>
+<section id="projects-that-used-our-code">
+<h1>Projects that used our code<a class="headerlink" href="#projects-that-used-our-code" title="Link to this heading">#</a></h1>
+<p>Here are some projects that have used this code (or versions of it). The code presented in this repo is a general implementation for qualitative user studies. However, it was and can be modified for more specific use cases.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<li><p><a class="reference external" href="http://scaling-anno.csail.mit.edu/">Scaling up instance annotation via label propagation</a>, ICCV 2021</p></li>
+<li><p><a class="reference external" href="https://evonneng.github.io/learning2listen/">Learning2Listen</a>, CVPR 2022</p></li>
+<li><p><a class="reference external" href="https://neerja.me/bias-gans/">Studying Bias in GANs through the Lens of Race (BiasGAN)</a>, ECCV 2022</p></li>
+<li><p><a class="reference external" href="https://ethanweber.me/sitcoms3D/">Sitcoms3D</a>, ECCV 2022</p></li>
 </ul>
+<!-- prettier-ignore-start -->
+<div class="toctree-wrapper compound">
+</div>
+<!-- prettier-ignore-end -->
 </section>
 
         </article>
@@ -206,7 +286,15 @@
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="reverse_proxy_setup.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Reverse Proxy Setup</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
           
         </div>
         <div class="bottom-of-page">
