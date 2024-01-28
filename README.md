@@ -29,7 +29,7 @@ The quickest way to understand this code it to look at our example. Here are the
     python -m pollo.server
     ```
 
-2. Open the [example_project/requester.ipynb](example_project/requester.ipynb) file and step through it.
+2. Open the [examples/image_project/requester.ipynb](examples/image_project/requester.ipynb) file and step through it.
 
 # Folder structure
 
