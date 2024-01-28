@@ -68,6 +68,6 @@ Host *
 ```
 
 
-# Resources
+## Resources
 
 Most of these instructions come from [https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/](https://www.scaleway.com/en/docs/tutorials/nginx-reverse-proxy/).

@@ -1,4 +1,4 @@
-# 🐥 Pollo: a tool for crowd-sourced polling
+# Pollo
 
 Pollo is repo is for AMT annotation tasks for computer vision purposes (e.g., qualitative user studies). The main idea for this repo is to specify a JSON file describing each HIT (Human Intelligence Task) which will then dynamically populate a website (via JavaScript) with the task. A notebook lets you create and manage your HITs.
 
@@ -87,3 +87,16 @@ Here are some projects that have used this code (or versions of it). The code pr
 - [Learning2Listen](https://evonneng.github.io/learning2listen/), CVPR 2022
 - [Studying Bias in GANs through the Lens of Race (BiasGAN)](https://neerja.me/bias-gans/), ECCV 2022
 - [Sitcoms3D](https://ethanweber.me/sitcoms3D/), ECCV 2022
+
+
+
+<!-- prettier-ignore-start -->
+
+```{toctree}
+:hidden:
+:caption: Getting Started
+
+reverse_proxy_setup
+```
+
+<!-- prettier-ignore-end -->
