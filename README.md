@@ -67,13 +67,13 @@ You need to host your server with an HTTPS domain to be compatible with AMT. Go 
 
 ```bash
 # an interface to ask the hit questions
-https://myurl.mydomain/hits/<hit_name>
+https://myurl.mydomain/hits-interface/<hit_name>
 
 # an interface showing the responses to a hit
-https://myurl.mydomain/responses/<hit_name>
+https://myurl.mydomain/responses-interface/<hit_name>
 
 # an interface showing the local responses to a hit
-https://myurl.mydomain/local_responses/<hit_name>
+https://myurl.mydomain/local_responses-interface/<hit_name>
 
 # a file tree
 https://myurl.mydomain/media/

@@ -17,7 +17,7 @@ async function getConfigFromConfigTypeAndConfigName(config_type, config_name) {
 async function getResultsFromConfigTypeAndConfigName(config_type, config_name) {
     return new Promise(function(resolve, reject) {
         console.log(config_name);
-        let endpoint = "/get_local_responses" +
+        let endpoint = "/local_responses" +
             "/" + config_name;
         $.get(endpoint,
             function(data, textStatus, jqXHR) {
