@@ -26,6 +26,7 @@ jobs:
       run: |
         cd docs
         sphinx-build -b html . _build/html
+        echo "pollo.studio" > _build/html/CNAME
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
