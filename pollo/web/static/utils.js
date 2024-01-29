@@ -106,6 +106,24 @@ function getVideo(image_url) {
     return container;
 }
 
+// Return the HTML with the nicely formatted, zoomed in, annotation. Polygons on top. :)
+function getImage(image_url) {
+    let container = document.createElement('div');
+    container.setAttribute("class", "img-overlay-wrap");
+    container.setAttribute("width", "100%");
+    let video = document.createElement('img');
+    video.height = GLOBAL_CONFIG.settings.image_height;
+    video.src = image_url;
+    // video.setAttribute("controls", "controls");
+    // video.setAttribute("preload", "metadata");
+    // video.setAttribute("width", "100%");
+    // video.setAttribute("autoplay", "autoplay");  // Added for autoplay
+    // video.setAttribute("muted", "muted");        // Added to ensure autoplay works in most browsers
+    // video.setAttribute("loop", "loop");  // Added for looping the video
+    container.appendChild(video);
+    return container;
+}
+
 // Get the pickn annotation as a div.
 function getPicknAnnotationAsDiv(example) {
 
@@ -179,13 +197,13 @@ function getNerfillerPicknAnnotationAsDiv(example) {
     let annotationHTML = document.createElement('div');
     // annotationHTML.setAttribute("class", "PickNRow");
 
-    let video_to_inpaint = example.video_to_inpaint;
+    // let video_to_inpaint = example.video_to_inpaint;
 
-    let shotchangeRow = document.createElement('div');
-    shotchangeRow.setAttribute("class", "PickNRow");
-    let imagehtml = getVideo(video_to_inpaint);
-    shotchangeRow.appendChild(imagehtml);
-    annotationHTML.appendChild(shotchangeRow);
+    // let shotchangeRow = document.createElement('div');
+    // shotchangeRow.setAttribute("class", "PickNRow");
+    // let imagehtml = getVideo(video_to_inpaint);
+    // shotchangeRow.appendChild(imagehtml);
+    // annotationHTML.appendChild(shotchangeRow);
 
     let possibleChoicesRow = document.createElement('div');
     possibleChoicesRow.setAttribute("class", "PickNRow");
@@ -194,7 +212,7 @@ function getNerfillerPicknAnnotationAsDiv(example) {
         let rowItem = document.createElement('div');
         rowItem.setAttribute("class", "PickNRowItem");
         let choice = choices[j];
-        rowItem.innerHTML = getVideo(choice).innerHTML;
+        rowItem.innerHTML = getImage(choice).innerHTML;
         rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
         let width_perc = Math.floor((1.0 / choices.length) * 100.0);
         rowItem.setAttribute("width", width_perc.toString() + "%");

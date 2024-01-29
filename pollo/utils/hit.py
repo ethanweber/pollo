@@ -11,7 +11,9 @@ class HitMaker:
     expected_seconds_per_query_example: int = 10
     image_height: int = 300
     image_max_width: int = 500
+    task_question: str = "What image looks better?"
     endpoint: str = "https://pollo.ethanweber.me"
+    task: str = "nerfiller_tasks"
 
     def get_default_hit(self):
         """Get a hit with default settings."""
@@ -21,4 +23,6 @@ class HitMaker:
         hit["settings"]["expected_seconds_per_query_example"] = self.expected_seconds_per_query_example
         hit["settings"]["image_height"] = self.image_height
         hit["settings"]["image_max_width"] = self.image_max_width
+        hit["settings"]["task_question"] = self.task_question
+        hit["settings"]["task"] = self.task
         return hit
