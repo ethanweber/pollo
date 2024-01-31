@@ -26,201 +26,31 @@ async function getResultsFromConfigTypeAndConfigName(config_type, config_name) {
     });
 }
 
-// Return the HTML with the nicely formatted, zoomed in, annotation. Polygons on top. :)
-function getImageWithBox(image_url, bbox, label) {
-
-    let container = document.createElement('div');
-    container.setAttribute("class", "img-overlay-wrap");
-    let image = document.createElement('img');
-    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    container.appendChild(image);
-    container.appendChild(svg);
-
-    // set the image url
-    image.src = image_url;
-
-    image.height = GLOBAL_CONFIG.settings.image_height;
-
-    if (bbox !== null) {
-        // pull out the bounding box data
-        let x = bbox[0];
-        let y = bbox[1];
-        let width = bbox[2];
-        let height = bbox[3];
-        let image_width = bbox[4];
-        let image_height = bbox[5];
-
-        let y_scalar = GLOBAL_CONFIG.settings.image_height / image_height;
-        let x_scalar = y_scalar;
-        // let y_scalar = 1.0;
-        // let x_scalar = 1.0;
-
-        // draw the box
-        let polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        svg.appendChild(polygon);
-        let tl = svg.createSVGPoint();
-        tl.x = x * x_scalar;
-        tl.y = y * y_scalar;
-        polygon.points.appendItem(tl);
-        let tr = svg.createSVGPoint();
-        tr.x = (x + width) * x_scalar;
-        tr.y = (y) * y_scalar;
-        polygon.points.appendItem(tr);
-        let br = svg.createSVGPoint();
-        br.x = (x + width) * x_scalar;
-        br.y = (y + height) * y_scalar;
-        polygon.points.appendItem(br);
-        let bl = svg.createSVGPoint();
-        bl.x = x * x_scalar;
-        bl.y = (y + height) * y_scalar;
-        polygon.points.appendItem(bl);
-    }
-
-    if (label !== null) {
-        let labeldiv = document.createElement('div');
-        labeldiv.innerHTML = label;
-        container.appendChild(labeldiv);
-    }
-
-
-    let outercontainer = document.createElement('div');
-    outercontainer.appendChild(container);
-    return outercontainer;
+// Helper function to convert HTML string to DOM node
+function createNodeFromHTML(htmlString) {
+    let div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+    return div.firstChild; // Return the node
 }
 
-// Return the HTML with the nicely formatted, zoomed in, annotation. Polygons on top. :)
-function getVideo(image_url) {
-    let container = document.createElement('div');
-    container.setAttribute("class", "img-overlay-wrap");
-    container.setAttribute("width", "100%");
-    let video = document.createElement('video');
-    video.height = GLOBAL_CONFIG.settings.image_height;
-    video.src = image_url;
-    video.setAttribute("controls", "controls");
-    video.setAttribute("preload", "metadata");
-    video.setAttribute("width", "100%");
-    // video.setAttribute("autoplay", "autoplay");  // Added for autoplay
-    // video.setAttribute("muted", "muted");        // Added to ensure autoplay works in most browsers
-    // video.setAttribute("loop", "loop");  // Added for looping the video
-    container.appendChild(video);
-    return container;
-}
-
-// Return the HTML with the nicely formatted, zoomed in, annotation. Polygons on top. :)
-function getImage(image_url) {
-    let container = document.createElement('div');
-    container.setAttribute("class", "img-overlay-wrap");
-    container.setAttribute("width", "100%");
-    let video = document.createElement('img');
-    video.height = GLOBAL_CONFIG.settings.image_height;
-    video.src = image_url;
-    // video.setAttribute("controls", "controls");
-    // video.setAttribute("preload", "metadata");
-    // video.setAttribute("width", "100%");
-    // video.setAttribute("autoplay", "autoplay");  // Added for autoplay
-    // video.setAttribute("muted", "muted");        // Added to ensure autoplay works in most browsers
-    // video.setAttribute("loop", "loop");  // Added for looping the video
-    container.appendChild(video);
-    return container;
-}
-
-// Get the pickn annotation as a div.
-function getPicknAnnotationAsDiv(example) {
-
-    let annotationHTML = document.createElement('div');
-    // annotationHTML.setAttribute("class", "PickNRow");
-
-    let images_and_boxes = example.images_and_boxes;
-
-    let shotchangeRow = document.createElement('div');
-    shotchangeRow.setAttribute("class", "PickNRow");
-    for (let i = 0; i < images_and_boxes.length; i++) {
-        let image_url = images_and_boxes[i][0];
-        let bbox = images_and_boxes[i][1]; // which might be null
-        let imagehtml = getImageWithBox(image_url, bbox, null);
-        shotchangeRow.appendChild(imagehtml);
-    }
-    annotationHTML.appendChild(shotchangeRow);
-
-    let possibleChoicesRow = document.createElement('div');
-    possibleChoicesRow.setAttribute("class", "PickNRow");
-    let choices = example.choices;
-    for (let j = 0; j < choices.length; j++) {
-        let rowItem = document.createElement('div');
-        rowItem.setAttribute("class", "PickNRowItem");
-        let choice = choices[j];
-        rowItem.innerHTML = getVideo(choice).innerHTML;
-        rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
-        let width_perc = Math.floor((1.0 / choices.length) * 100.0);
-        rowItem.setAttribute("width", width_perc.toString() + "%");
-        possibleChoicesRow.appendChild(rowItem);
-    }
-    annotationHTML.appendChild(possibleChoicesRow);
-
-    return annotationHTML
-}
-
-// Get the pickn annotation as a div.
-function getBiasganAnnotationAsDiv(example) {
-    let annotationHTML = document.createElement('div');
-    let shotchangeRow = document.createElement('div');
-    shotchangeRow.setAttribute("class", "PickNRow");
-    for (let i = 0; i < example.urls.length; i++) {
-        let image_url = example.urls[i];
-        let label = null;
-        if ('url_labels' in example) {
-            label = example.url_labels[i];
-        }
-        let imagehtml = getImageWithBox(image_url, null, label);
-        shotchangeRow.appendChild(imagehtml);
-    }
-    annotationHTML.appendChild(shotchangeRow);
-    let possibleChoicesRow = document.createElement('div');
-    possibleChoicesRow.setAttribute("class", "PickNRow");
-    let choices = example.choices;
-    for (let j = 0; j < choices.length; j++) {
-        let rowItem = document.createElement('div');
-        rowItem.setAttribute("class", "PickNRowItem");
-        let choice = choices[j];
-        rowItem.innerHTML += "<button type=\"button\">" + choice + "</button>"
-        let width_perc = Math.floor((1.0 / choices.length) * 100.0);
-        rowItem.setAttribute("width", width_perc.toString() + "%");
-        possibleChoicesRow.appendChild(rowItem);
-    }
-    annotationHTML.appendChild(possibleChoicesRow);
-    return annotationHTML
-}
-
-// Get the pickn annotation as a div.
-function getNerfillerPicknAnnotationAsDiv(example) {
-
-    let annotationHTML = document.createElement('div');
-    // annotationHTML.setAttribute("class", "PickNRow");
-
-    // let video_to_inpaint = example.video_to_inpaint;
-
-    // let shotchangeRow = document.createElement('div');
-    // shotchangeRow.setAttribute("class", "PickNRow");
-    // let imagehtml = getVideo(video_to_inpaint);
-    // shotchangeRow.appendChild(imagehtml);
-    // annotationHTML.appendChild(shotchangeRow);
-
-    let possibleChoicesRow = document.createElement('div');
-    possibleChoicesRow.setAttribute("class", "PickNRow");
-    let choices = example.choices;
-    for (let j = 0; j < choices.length; j++) {
-        let rowItem = document.createElement('div');
-        rowItem.setAttribute("class", "PickNRowItem");
-        let choice = choices[j];
-        rowItem.innerHTML = getImage(choice).innerHTML;
-        rowItem.innerHTML += "<button style=\"width: 25%\" type=\"button\">" + j.toString() + "</button>"
-        let width_perc = Math.floor((1.0 / choices.length) * 100.0);
-        rowItem.setAttribute("width", width_perc.toString() + "%");
-        possibleChoicesRow.appendChild(rowItem);
-    }
-    annotationHTML.appendChild(possibleChoicesRow);
-
-    return annotationHTML
+// Returns the HTML for the example.
+async function getExampleTemplate(example) {
+    return new Promise(function(resolve, reject) {
+        let endpoint = "/example_template";
+        $.ajax({
+            type: 'POST',
+            url: endpoint,
+            data: JSON.stringify(example),
+            contentType: 'application/json',
+            success: function(data, textStatus, jqXHR) {
+                let node = createNodeFromHTML(data);
+                resolve(node);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                reject(errorThrown);
+            }
+        });
+    });
 }
 
 // Get a random subarray of a list.

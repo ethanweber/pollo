@@ -15,6 +15,7 @@ from pyngrok import ngrok
 from flask import Flask, jsonify, request, send_from_directory
 
 from pollo.utils.io import load_from_json, write_to_json
+from pollo.example_templates import get_template_instance
 
 
 parser = argparse.ArgumentParser(description="")
@@ -115,6 +116,14 @@ class EndpointHandler:
             modified_html = modified_html.replace("${CONFIG_NAME}", config_name)
             return modified_html
 
+        @self.app.route("/example_template", methods=["POST"])
+        def example_template():
+            """Endpoint to handle POST request with 'example' dictionary."""
+            example_data = request.json
+            example_template = get_template_instance(example_data["template_name"])
+            html_content = example_template.get_div(example_data)
+            return html_content, 200, {"Content-Type": "text/html"}
+
 
 def run_flask(app, port):
     app.run(debug=False, threaded=True, host="0.0.0.0", port=port)
@@ -147,6 +156,7 @@ def main():
     # Then start Ngrok when Flask is running
     tunnel = ngrok.connect(args.port)
     print("Ngrok Tunnel:", tunnel)
+
 
 if __name__ == "__main__":
     main()

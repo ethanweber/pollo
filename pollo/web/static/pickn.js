@@ -11,8 +11,7 @@ async function picknSetContent() {
     document.getElementById("GoToAnnotationTestButton").disabled = true;
 
     // INSTRUCTIONS
-    // document.getElementById("IntructionsContent").innerHTML = document.getElementById("picknInstructionsContent").innerHTML;
-    document.getElementById("IntructionsContent").innerHTML = document.getElementById(GLOBAL_CONFIG.settings.task).innerHTML;
+    document.getElementById("instructions").innerHTML = GLOBAL_CONFIG.settings.instructions_div;
 
 
     // EXAMPLES ON MAIN PAGE
@@ -97,7 +96,7 @@ function picknSetCurrentAnnotationDiv(idx) {
 async function getExamplesDivsFromConfig(example) {
     let examples = [];
     for (let i = 0; i < example.length; i++) {
-        examples.push(getNerfillerPicknAnnotationAsDiv(example[i]));
+        examples.push(getExampleTemplate(example[i]));
     }
     return await Promise.all(examples);
 }

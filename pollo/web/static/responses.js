@@ -18,7 +18,7 @@ $(document).ready(function() {
 async function picknGetImagesFromAnnotationsFromChoices(example, choices) {
     let examples = [];
     for (let i = 0; i < example.length; i++) {
-        examples.push(getNerfillerPicknAnnotationAsDiv(example[i]));
+        examples.push(getExampleTemplate(example[i]));
     }
     return await Promise.all(examples);
 }

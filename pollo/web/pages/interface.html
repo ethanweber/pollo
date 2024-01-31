@@ -27,7 +27,11 @@
     <div class="panel panel-primary">
       <p>Please <strong>read</strong> the instructions and check the examples at least once before proceeding.
       </p>
-      <div id="IntructionsContent"></div>
+      <div id="IntructionsContent">
+        <div id="instructions">
+        </div>
+        <div id="PicknExamples"></div>
+      </div>
       <p align="center">
         <input id="proceedButton" onclick="goToPage('AnnotationTestStart')" style="height:50px;width:100px"
           type="button" value="Proceed" disabled="disabled" />
@@ -91,30 +95,6 @@
 <script type="text/javascript" src="/static/mturk.js"></script>
 <script type="text/javascript" src="/static/pickn.js"></script>
 
-<!--keep content for the page down here-->
-<div id="picknInstructionsContent" style="display: none;">
-  <p>
-    In this job, you are asked to select which of the two people is in a more realistic position.
-  </p>
-  <p>
-    Each question consists of two rows.
-    The <b>top row</b> shows two images from a popular TV show, where the person of interest is marked with a colored
-    box.
-    The <b>bottom row</b> shows two videos of your possible answers: 0 or 1.
-  </p>
-  <p><b>Your task is to choose the video where the person is in a better location.</b></p>
-  <p>Press play on the videos to inform your response, and then choose your selection by clicking on the number below.
-  </p>
-  <p><b><i>
-        The estimated time for this HIT is less than 10 minutes. Please be consistent in your responses, or otherwise
-        the HIT will not be accepted. Thank you.
-      </i></b></p>
-  <h3>Examples</h3>
-  <p>Click to play the videos.</p>
-  <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-  <div id="PicknExamples"></div>
-</div>
-
 <div id="ExampleTemplate" style="display: none;">
   <div class="ExampleTemplateClass1"></div>
   <div align="center" class="ExampleTemplateContent1"></div>
@@ -131,8 +111,6 @@
   </div>
 </div>
 
-
-<!-- friends -->
 <div class="panel panel-primary" id="picknRealTaskTemplate" style="display:none;">
   <p>You will be asked to answer to <span id="picknRealTaskTemplateClassNumImages"></span> examples
     sequentially.</p>
@@ -150,156 +128,6 @@
         paid.
         We thank you for your help.
       </i></b></p>
-</div>
-
-<!-- biasgan -->
-<!-- <div id="biasgan_tasks" style="display:none;"> -->
-
-  <!-- <div id="Task1_Race_Classification">
-    <p>Read the task carefully and inspect the image.</p>
-    <p>Instructions: Identify the race of the person(s) in the image, by selecting one of the options described below.
-    </p>
-    <p>Description of the options:</p>
-    <p>1) Black - This is an image of a black person. </p>
-    <p>2) White - This is an image of a white person. </p>
-    <p>3) Non-black/white - I know the race of the person and the person is not black or white. </p>
-    <p>4) Cannot Determine - I cannot tell the race of the person. </p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
-      worker not being paid and their data being excluded from our study cases.</p>
-    <h3>Examples</h3>
-    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
-  </div> -->
-
-  <!-- <div id="Task2_Real_Fake_Classification">
-    <p>Instructions: Identify real photographs and fake images by selecting on of the options described below. Real
-      photographs are images of real person(s) captured using a camera and fake images are computer generated images of
-      a person(s) who do not exist.</p>
-    <p>Description of the options:</p>
-    <p> 1) Real Photograph - This is an photograph of a real person taken using a camera.</p>
-    <p> 2) Fake/Manipulated Image - This is a computer generated image of a person(s) who do not exist.</p>
-    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
-      facial features, or warped background.
-      Note that these are not all the possible examples of what a fake image can look like.</p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
-      worker not being paid and their data being excluded from our study cases.</p>
-    <h3>Examples</h3>
-    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
-  </div> -->
-
-  <!-- <div id="Task3_Quality_Ranking">
-    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake
-      images are computer generated images of a person(s) who do not exist.</p>
-    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
-      facial features, or a warped background.
-      Note that these are not all the possible examples of what a fake image can look like.</p>
-    <p>Description of the options:</p>
-    <p> 1) Image A - Image A is more likely to be a fake image.</p>
-    <p> 2) Image B - Image B is more likely to be a fake image.</p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
-      worker not being paid and their data being excluded from our study cases.</p>
-    <h2>Examples of Real Photographs:</h2>
-    <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3"
-          style="width:100%">
-      </div>
-    </div>
-    <h2>Examples of Fake Images:</h2>
-    <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3"
-          style="width:100%">
-      </div>
-    </div>
-
-    <h3>Examples</h3>
-    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
-  </div> -->
-
-
-  <!-- <div id="Task4_Quality_Ranking">
-    <p>Instructions: Given two images, identify which image is fake by selecting on of the options described below. Fake
-      images are computer generated images of a person(s) who do not exist.</p>
-    <p>Fake images tend to appear distorted, for example a face with more than two eyes, unusual head shape, disfigured
-      facial features, or a warped background.
-      Note that these are not all the possible examples of what a fake image can look like.</p>
-    <p>Description of the options:</p>
-    <p> 1) Image A - Image A is more likely to be a fake image.</p>
-    <p> 2) Image B - Image B is more likely to be a fake image.</p>
-    <p>There are 10 catch trials and failure to respond correctly to at least eight of these trials will lead to the
-      worker not being paid and their data being excluded from our study cases.</p>
-    <h2>Examples of Real Photographs:</h2>
-    <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/2815.jpg" alt="real_example1"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/12693.jpg" alt="real_example2"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/24427.jpg" alt="real_example3"
-          style="width:100%">
-      </div>
-    </div>
-    <h2>Examples of Fake Images:</h2>
-    <div class="row">
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0000.png" alt="fake_example1"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed0012.png" alt="fake_example2"
-          style="width:100%">
-      </div>
-      <div class="column">
-        <img src="/static/data/media/biasgan/mturk_data/Task3_Quality_Ranking/examples/seed1803.png" alt="fake_example3"
-          style="width:100%">
-      </div>
-    </div>
-
-    <h3>Examples</h3>
-    <p>You must click the buttons below to see the correct responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
-  </div>
-</div> -->
-
-<!-- nerfiller -->
-<div id="nerfiller_tasks" style="display:none;">
-  <div id="Nerfiller_User_Study">
-    <p>Instructions: Given a reference video (above) and two videos below, identify which video does a better job at completing the missing content in pink. Judge based on quality.
-    <p></p>
-    <p>Description of the options:</p>
-    <ul>
-        <li><strong>Image 0</strong>: The first option looks better and does better at completing the pink region.</li>
-        <li><strong>Image 1</strong>: The second option looks better and does better at completing the pink region.</li>
-    </ul>
-    <p>There are quality checks and failure to be consistent in your responses will lead to the worker not being paid and their data will be excluded from our study.</p>
-    <p><strong>You need to play the video to see how the videos look when the camera moves. If the video does not play automatically, you'll need to press play.</strong></p>
-    <h3>Examples that you'll encounter with suggested responses</h3>
-    <p>You must click the buttons below to see the preferred responses and in order to proceed.</p>
-    <div id="PicknExamples"></div>
-  </div>
 </div>
 
 </html>
